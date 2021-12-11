@@ -1,0 +1,34 @@
+object Frame1: TFrame1
+  Size.Width = 178.000000000000000000
+  Size.Height = 72.000000000000000000
+  Size.PlatformDefault = False
+  object rectBtnSignUp: TRectangle
+    Align = Client
+    Fill.Kind = None
+    Size.Width = 178.000000000000000000
+    Size.Height = 72.000000000000000000
+    Size.PlatformDefault = False
+    object Label2: TLabel
+      Align = Center
+      StyledSettings = []
+      TextSettings.Font.Family = 'Roboto'
+      TextSettings.Font.Size = 16.000000000000000000
+      TextSettings.Font.StyleExt = {00050000000000000004000000}
+      TextSettings.FontColor = xFFF0F0F0
+      TextSettings.HorzAlign = Center
+      Text = 'Sign Up'
+      TabOrder = 1
+    end
+    object Rectangle3: TRectangle
+      Align = Bottom
+      Fill.Color = xFFF0F0F0
+      HitTest = False
+      Margins.Bottom = -5.000000000000000000
+      Position.Y = 69.000000000000000000
+      Size.Width = 178.000000000000000000
+      Size.Height = 8.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+    end
+  end
+end

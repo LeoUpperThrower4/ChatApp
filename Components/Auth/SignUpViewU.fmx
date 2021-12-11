@@ -1,0 +1,101 @@
+object SignUpView: TSignUpView
+  Align = Client
+  Size.Width = 330.000000000000000000
+  Size.Height = 165.000000000000000000
+  Size.PlatformDefault = False
+  object lytName: TLayout
+    Align = Top
+    Size.Width = 330.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    object edtName: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Top
+      TabOrder = 0
+      Position.Y = 28.000000000000000000
+      Margins.Top = 6.000000000000000000
+      Size.Width = 330.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object lblName: TLabel
+      Align = Top
+      StyledSettings = [Family, Size, Style]
+      Margins.Left = 2.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Position.X = 2.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 328.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.FontColor = claWhite
+      Text = 'Name'
+      TabOrder = 1
+    end
+  end
+  object lytPwd: TLayout
+    Align = Top
+    Position.Y = 100.000000000000000000
+    Size.Width = 330.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object edtPwd: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Top
+      TabOrder = 0
+      Position.Y = 28.000000000000000000
+      Margins.Top = 6.000000000000000000
+      Size.Width = 330.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object lblPwd: TLabel
+      Align = Top
+      StyledSettings = [Family, Size, Style]
+      Margins.Left = 2.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Position.X = 2.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 328.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.FontColor = claWhite
+      Text = 'Password'
+      TabOrder = 1
+    end
+  end
+  object lytEmail: TLayout
+    Align = Top
+    Position.Y = 50.000000000000000000
+    Size.Width = 330.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object edtEmail: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Top
+      TabOrder = 0
+      Position.Y = 28.000000000000000000
+      Margins.Top = 6.000000000000000000
+      Size.Width = 330.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object lblEmail: TLabel
+      Align = Top
+      StyledSettings = [Family, Size, Style]
+      Margins.Left = 2.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Position.X = 2.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 328.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.FontColor = claWhite
+      Text = 'Email'
+      TabOrder = 1
+    end
+  end
+end
