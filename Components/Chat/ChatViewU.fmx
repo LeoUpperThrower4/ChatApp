@@ -1,0 +1,67 @@
+object ChatView: TChatView
+  Align = Client
+  Size.Width = 660.000000000000000000
+  Size.Height = 431.000000000000000000
+  Size.PlatformDefault = False
+  object lytWriteMsg: TLayout
+    Align = Bottom
+    Position.Y = 371.000000000000000000
+    Size.Width = 660.000000000000000000
+    Size.Height = 60.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object rectWriteMsgBg: TRectangle
+      Align = Client
+      Size.Width = 660.000000000000000000
+      Size.Height = 60.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      object edtMsg: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Client
+        TabOrder = 0
+        Size.Width = 590.000000000000000000
+        Size.Height = 60.000000000000000000
+        Size.PlatformDefault = False
+      end
+      object rectBtnSendWrapper: TRectangle
+        Align = Right
+        Position.X = 590.000000000000000000
+        Size.Width = 70.000000000000000000
+        Size.Height = 60.000000000000000000
+        Size.PlatformDefault = False
+        object btnSend: TSpeedButton
+          Align = Client
+          StyledSettings = [Style, FontColor]
+          Size.Width = 70.000000000000000000
+          Size.Height = 60.000000000000000000
+          Size.PlatformDefault = False
+          Text = 'SEND'
+          TextSettings.Font.Family = 'Roboto'
+          TextSettings.Font.Size = 16.000000000000000000
+        end
+      end
+    end
+  end
+  object Layout1: TLayout
+    Align = Client
+    Size.Width = 660.000000000000000000
+    Size.Height = 371.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object Memo1: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      Align = Client
+      CanFocus = False
+      Enabled = False
+      HitTest = False
+      Size.Width = 660.000000000000000000
+      Size.Height = 371.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      Viewport.Width = 656.000000000000000000
+      Viewport.Height = 367.000000000000000000
+    end
+  end
+end

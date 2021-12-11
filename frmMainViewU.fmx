@@ -8,5 +8,6 @@ object frmMainView: TfrmMainView
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   DesignerMasterStyle = 0
 end

@@ -10,10 +10,13 @@ uses
   AuthManagerU,
   SignUpViewU,
   LoginViewU,
+  // Chat
+  ChatViewU,
   // FB4D
   FB4D.Interfaces;
 
 type
+  OnUserSuccessfullyLoggedIn = procedure(User: IFirebaseUser) of object;
   TAuthMode = (amLogin, amSignUp);
   TAuthView = class(TFrame)
     rectBg: TRectangle;
@@ -37,14 +40,16 @@ type
     procedure rectBtnSignUpClick(Sender: TObject);
     procedure SetLoginForm;
     procedure SetSignUpForm;
-    constructor Create(AComponent : TComponent); override;
+    procedure SetOnSuccessfullLogin(Callback : OnUserSuccessfullyLoggedIn);
+    constructor Create(AComponent : TComponent);
     procedure rectBtnSubmitClick(Sender: TObject);
   private
     { Private declarations }
-    SignUpFrame : TSignUpView;
-    LoginFrame  : TLoginView;
-    AuthManager : TAuthManager;
-    FAuthMode   : TAuthMode;
+    SignUpFrame         : TSignUpView;
+    LoginFrame          : TLoginView;
+    AuthManager         : TAuthManager;
+    FAuthMode           : TAuthMode;
+    FOnSuccessfullLogin : OnUserSuccessfullyLoggedIn;
     procedure SetLoginBtnActive;
     procedure SetSignUpBtnActive;
     procedure StartLoadingState;
@@ -59,9 +64,9 @@ implementation
 
 { TAuthView }
 
-constructor TAuthView.Create(AComponent: TComponent);
+constructor TAuthView.Create(AComponent : TComponent);
 begin
-  inherited;
+  inherited Create(AComponent);
   AuthManager := TAuthManager.Create;
   SetLoginBtnActive;
 end;
@@ -78,7 +83,7 @@ var
 begin
   if Info.Contains('Sign in') then
   begin
-    // Levar para o chat
+    FOnSuccessfullLogin(User);
   end
   else
   begin
@@ -194,6 +199,11 @@ begin
     LoginFrame.Parent := lytForm;
     rectMiddle.Height := rectMiddle.Height - 50;
   end;
+end;
+
+procedure TAuthView.SetOnSuccessfullLogin(Callback: OnUserSuccessfullyLoggedIn);
+begin
+  FOnSuccessfullLogin := Callback;
 end;
 
 end.
