@@ -1,0 +1,69 @@
+object LoginView: TLoginView
+  Align = Client
+  Size.Width = 320.000000000000000000
+  Size.Height = 115.000000000000000000
+  Size.PlatformDefault = False
+  object lytEmail: TLayout
+    Align = Top
+    Size.Width = 320.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object lblEmail: TLabel
+      Align = Top
+      StyledSettings = [Family, Size, Style]
+      Margins.Left = 2.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Position.X = 2.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 318.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.FontColor = claWhite
+      Text = 'Name'
+      TabOrder = 1
+    end
+    object edtEmail: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Bottom
+      TabOrder = 0
+      Position.Y = 28.000000000000000000
+      Margins.Top = 6.000000000000000000
+      Size.Width = 320.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+  object lytSenha: TLayout
+    Align = Top
+    Position.Y = 50.000000000000000000
+    Size.Width = 320.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object lblSenha: TLabel
+      Align = Top
+      StyledSettings = [Family, Size, Style]
+      Margins.Left = 2.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Position.X = 2.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 318.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.FontColor = claWhite
+      Text = 'Password'
+      TabOrder = 1
+    end
+    object edtPwd: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Bottom
+      TabOrder = 0
+      Position.Y = 28.000000000000000000
+      Margins.Top = 6.000000000000000000
+      Size.Width = 320.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+    end
+  end
+end

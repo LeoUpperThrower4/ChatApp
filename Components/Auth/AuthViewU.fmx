@@ -1,0 +1,154 @@
+object AuthView: TAuthView
+  Align = Client
+  Size.Width = 585.000000000000000000
+  Size.Height = 466.000000000000000000
+  Size.PlatformDefault = False
+  object rectBg: TRectangle
+    Align = Contents
+    Fill.Color = xFF09A770
+    Size.Width = 585.000000000000000000
+    Size.Height = 466.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+  end
+  object rectMiddle: TRectangle
+    Align = Center
+    Fill.Color = xFF374246
+    Padding.Left = 10.000000000000000000
+    Padding.Right = 10.000000000000000000
+    Padding.Bottom = 10.000000000000000000
+    Size.Width = 224.000000000000000000
+    Size.Height = 293.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    object lytProfilePic: TLayout
+      Align = Top
+      Padding.Left = 75.000000000000000000
+      Padding.Right = 75.000000000000000000
+      Margins.Top = -25.000000000000000000
+      Position.X = 10.000000000000000000
+      Position.Y = -25.000000000000000000
+      Size.Width = 204.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object rectPicture: TRoundRect
+        Align = Client
+        Size.Width = 54.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+    object lytAuthMode: TLayout
+      Align = Top
+      Position.X = 10.000000000000000000
+      Position.Y = 25.000000000000000000
+      Size.Width = 204.000000000000000000
+      Size.Height = 50.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object rectBtnLogin: TRectangle
+        Align = Left
+        Fill.Kind = None
+        Hint = 'Set type to login'
+        Size.Width = 100.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = rectBtnLoginClick
+        object lblLogin: TLabel
+          Align = Center
+          StyledSettings = []
+          TextSettings.Font.Family = 'Roboto'
+          TextSettings.Font.Size = 16.000000000000000000
+          TextSettings.Font.StyleExt = {00050000000000000004000000}
+          TextSettings.FontColor = xFF4E5E63
+          TextSettings.HorzAlign = Center
+          Text = 'Login'
+          TabOrder = 0
+        end
+      end
+      object rectBtnSignUp: TRectangle
+        Align = Right
+        Fill.Kind = None
+        Position.X = 104.000000000000000000
+        Size.Width = 100.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        OnClick = rectBtnSignUpClick
+        object lblSignUp: TLabel
+          Align = Center
+          StyledSettings = []
+          TextSettings.Font.Family = 'Roboto'
+          TextSettings.Font.Size = 16.000000000000000000
+          TextSettings.Font.StyleExt = {00050000000000000004000000}
+          TextSettings.FontColor = xFFF0F0F0
+          TextSettings.HorzAlign = Center
+          Text = 'Sign Up'
+          TabOrder = 1
+        end
+      end
+      object rectSeparator: TRectangle
+        Align = Left
+        Fill.Color = xFF4E5E63
+        Position.X = 100.000000000000000000
+        Size.Width = 4.000000000000000000
+        Size.Height = 50.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+      end
+      object rectBottom: TRectangle
+        Anchors = [akLeft]
+        Fill.Color = xFFF0F0F0
+        HitTest = False
+        Margins.Bottom = -5.000000000000000000
+        Position.X = 100.000000000000000000
+        Position.Y = 47.000000000000000000
+        Size.Width = 105.000000000000000000
+        Size.Height = 3.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+      end
+    end
+    object lytForm: TLayout
+      Align = Client
+      Margins.Top = 5.000000000000000000
+      Size.Width = 204.000000000000000000
+      Size.Height = 153.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+    end
+    object lytBtn: TLayout
+      Align = Bottom
+      Margins.Top = 10.000000000000000000
+      Position.X = 10.000000000000000000
+      Position.Y = 243.000000000000000000
+      Size.Width = 204.000000000000000000
+      Size.Height = 40.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      object rectBtnSubmit: TRectangle
+        Align = Client
+        Fill.Color = xFF04C582
+        Size.Width = 204.000000000000000000
+        Size.Height = 40.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Kind = None
+        OnClick = rectBtnSubmitClick
+        object lblBtnSubmit: TLabel
+          Align = Center
+          StyledSettings = []
+          TextSettings.Font.Family = 'Roboto'
+          TextSettings.Font.Size = 16.000000000000000000
+          TextSettings.FontColor = xFFF0F0F0
+          TextSettings.HorzAlign = Center
+          Text = 'Submit'
+          TabOrder = 0
+        end
+      end
+    end
+  end
+end
