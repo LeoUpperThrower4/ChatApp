@@ -69,17 +69,21 @@ end;
 
 function TAuthManager.EmailLogin(email, pwd: string; OnUserResponse: TOnUserResponse; OnError: TOnRequestError): Boolean;
 begin
+  Result := False;
   if Assigned(FAuthenticator) then
   begin
-    FAuthenticator.SignInWithEmailAndPassword(email, pwd, OnUserResponse, OnError)
+    FAuthenticator.SignInWithEmailAndPassword(email, pwd, OnUserResponse, OnError);
+    Result := True;
   end;
 end;
 
 function TAuthManager.EmailSignUp(email, pwd: string; OnUserResponse: TOnUserResponse; OnError: TOnRequestError): Boolean;
 begin
+  Result := False;
   if Assigned(FAuthenticator) then
   begin
     FAuthenticator.SignUpWithEmailAndPassword(email, pwd, OnUserResponse, OnError);
+    Result := True;
   end;
 end;
 

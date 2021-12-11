@@ -16,20 +16,29 @@ uses
   FMX.Graphics,
   FMX.Dialogs,
   // Auth
-  AuthViewU;
+  AuthManagerU,
+  AuthViewU,
+  // Chat
+  ChatViewU,
+  //FB4D
+  FB4D.Interfaces;
 
 type
   TfrmMainView = class(TForm)
     procedure FormCreate(Sender: TObject);
+    procedure OnSuccessfullLogin(User: IFirebaseUser);
+    procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
+
   end;
 
 var
   frmMainView : TfrmMainView;
   AuthView    : TAuthView;
+  ChatView    : TChatView;
 
 implementation
 
@@ -38,7 +47,22 @@ implementation
 procedure TfrmMainView.FormCreate(Sender: TObject);
 begin
   AuthView := TAuthView.Create(Self);
+  AuthView.SetOnSuccessfullLogin(OnSuccessfullLogin);
   AuthView.Parent := Self;
+end;
+
+procedure TfrmMainView.FormDestroy(Sender: TObject);
+begin
+  if Assigned(ChatView)
+    then ChatView.Free;
+end;
+
+procedure TfrmMainView.OnSuccessfullLogin(User: IFirebaseUser);
+begin
+  AuthView.Free;
+
+  ChatView := TChatView.Create(Self);
+  ChatView.Parent := Self;
 end;
 
 end.
