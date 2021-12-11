@@ -72,9 +72,24 @@ begin
 end;
 
 procedure TAuthView.OnError(const RequestID, ErrMsg: string);
+var
+  msg : String;
 begin
   ShowMessage(ErrMsg);
-  // Tratar esses erros
+  if Assigned(SignUpFrame) then
+  begin
+    if ErrMsg = 'INVALID_EMAIL' then
+    begin
+      ShowMessage('Invalid email!');
+      // Perform a simple animation
+    end
+    else if ErrMsg = 'MISSING_PASSWORD' then
+    begin
+      ShowMessage('You forgot the password!');
+      // Perform a simple animation
+    end;
+  end;
+
 end;
 
 procedure TAuthView.OnUserResponse(const Info: string; User: IFirebaseUser);
