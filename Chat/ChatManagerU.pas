@@ -15,10 +15,11 @@ type
     private
       FMessages   : TJSONArray;
       FRealTimeDB : IRealTimeDB;
+      FOnUpdateLatestMessages : TOnRTDBValue;
       procedure OnUpdateLatestMessages    (ResourceParams: TRequestResourceParam; Val: TJSONValue);
-      procedure OnUpdateLatestMessagesFail(const RequestID, ErrMsg: string);
+      procedure OnUpdateLatestMessagesFail(const RequestID, ErrMsg: string); // inutil por enquanto
     public
-      procedure UpdateLatestMessages;
+      procedure UpdateLatestMessages(OnUpdate: TOnRTDBValue; OnError: TOnRequestError);
       constructor Create;
   end;
 
@@ -50,6 +51,8 @@ end;
 procedure TChatManager.OnUpdateLatestMessages(ResourceParams: TRequestResourceParam; Val: TJSONValue);
 begin
   FMessages := Val as TJSONArray;
+  if FOnUpdateLatestMessages <> nil
+    then FOnUpdateLatestMessages(ResourceParams, Val);
 end;
 
 procedure TChatManager.OnUpdateLatestMessagesFail(const RequestID, ErrMsg: string);
@@ -57,9 +60,12 @@ begin
   // O que fazer? Como avisar? Eviar como mensagem de api do Windows?
 end;
 
-procedure TChatManager.UpdateLatestMessages;
+procedure TChatManager.UpdateLatestMessages(OnUpdate: TOnRTDBValue = nil; OnError: TOnRequestError);
 begin
-  FRealTimeDB.Get(['Global', 'messages'], OnUpdateLatestMessages, OnUpdateLatestMessagesFail);
+
+  FOnUpdateLatestMessages := OnUpdate;
+
+  FRealTimeDB.Get(['Global', 'messages'], OnUpdateLatestMessages, OnError);
 end;
 
 end.
