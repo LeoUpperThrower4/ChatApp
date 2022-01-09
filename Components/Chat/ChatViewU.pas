@@ -9,6 +9,7 @@ uses
   SingleMsgViewU,
   // Manager
   AuthManagerU,
+  ChatManagerU,
   // Utils
   JSON,
   // FB4D
@@ -35,7 +36,6 @@ type
   public
     { Public declarations }
   constructor Create(AOwner: TComponent); override;
-  destructor Destroy;
   end;
 
 implementation
@@ -109,17 +109,10 @@ begin
   fEvent := TFirebaseEvent.Create;
 
   // Inicializa o Realtime Database
-  RTDB := TRealTimeDB.Create('https://chatapp-31972-default-rtdb.firebaseio.com/', g_AuthManager.Authenticator);
-
-  // Carrega mensagens antigas
+  g_ChatManager := TChatManager.Create;
 
   // Inicia o listener do banco de dados para esperar por novas mensagens
   //StartListening;
-end;
-
-destructor TChatView.Destroy;
-begin
-  fEvent.StopListening;
 end;
 
 end.
