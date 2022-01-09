@@ -7,18 +7,25 @@ uses
 type
   TAuthManager = class
   private
-    FAuthenticated : Boolean;
-    FApiKey        : String;
-    FHasValidApiKey: Boolean;
-    FAuthenticator  : IFirebaseAuthentication;
+    FAuthenticated  : Boolean;
+    FApiKey         : String;
+    FHasValidApiKey : Boolean;
+    FOnUserLoggedIn : TOnUserResponse;
     function SearchApiKeyInReg(var error : string)  : Boolean;
+    procedure SetOnUserLoggedIn(OnUserResponse: TOnUserResponse);
+    procedure OnUserLoggedIn(const Info: string; User: IFirebaseUser);
   public
-    function isAuthenticated: Boolean;
-    function HasValidApiKey : Boolean;
+    CurrentUser              : IFirebaseUser;
+    Authenticator            : IFirebaseAuthentication;
+    property isAuthenticated : Boolean read FAuthenticated;
+    function HasValidApiKey  : Boolean;
     function EmailLogin (email, pwd: string; OnUserResponse: TOnUserResponse; OnError: TOnRequestError) : Boolean;
     function EmailSignUp(email, pwd: string; OnUserResponse: TOnUserResponse; OnError: TOnRequestError) : Boolean;
     constructor Create;
   end;
+
+var
+  g_AuthManager: TAuthManager;
 
 implementation
 
@@ -36,7 +43,7 @@ begin
   FHasValidApiKey := SearchApiKeyInReg(error);
   if HasValidApiKey then
   begin
-    FAuthenticator := TFirebaseAuthentication.Create(FApiKey);
+    Authenticator := TFirebaseAuthentication.Create(FApiKey);
   end;
 end;
 
@@ -47,10 +54,13 @@ begin
   error := '';
   Result := False;
   Reg := TRegistry.Create;
-  try 
-    if Reg.OpenKey('\ChatApp\FB', False) then
+//  Isso pode ser colocado em um instalador para que a chave não fique no repositório
+//  Reg.OpenKey('\ChatApp\Firebase', True);
+//  Reg.WriteString('WebAPIKey', 'AIzaSyDUcS4IWiC7PVYH-5LT69gy--NJHmPZXs4');
+  try
+    if Reg.OpenKey('\ChatApp\Firebase', False) then
     begin
-      FApiKey := Reg.ReadString('WebApiKey');  
+      FApiKey := Reg.ReadString('WebAPIKey');
       Result := True;
     end
     else
@@ -62,28 +72,36 @@ begin
   end;
 end;
 
-function TAuthManager.isAuthenticated: Boolean;
+procedure TAuthManager.SetOnUserLoggedIn(OnUserResponse: TOnUserResponse);
 begin
-  Result := FAuthenticated;
+  FOnUserLoggedIn := OnUserResponse;
+end;
+
+procedure TAuthManager.OnUserLoggedIn(const Info: string; User: IFirebaseUser);
+begin
+  CurrentUser    := User;
+  FAuthenticated := True;
+  FOnUserLoggedIn(Info, User);
 end;
 
 function TAuthManager.EmailLogin(email, pwd: string; OnUserResponse: TOnUserResponse; OnError: TOnRequestError): Boolean;
 begin
   Result := False;
-  if Assigned(FAuthenticator) then
+  if Assigned(Authenticator) then
   begin
-    FAuthenticator.SignInWithEmailAndPassword(email, pwd, OnUserResponse, OnError);
     Result := True;
+    SetOnUserLoggedIn(OnUserResponse);
+    Authenticator.SignInWithEmailAndPassword(email, pwd, OnUserLoggedIn, OnError)
   end;
 end;
 
 function TAuthManager.EmailSignUp(email, pwd: string; OnUserResponse: TOnUserResponse; OnError: TOnRequestError): Boolean;
 begin
   Result := False;
-  if Assigned(FAuthenticator) then
+  if Assigned(Authenticator) then
   begin
-    FAuthenticator.SignUpWithEmailAndPassword(email, pwd, OnUserResponse, OnError);
     Result := True;
+    Authenticator.SignUpWithEmailAndPassword(email, pwd, OnUserResponse, OnError);
   end;
 end;
 

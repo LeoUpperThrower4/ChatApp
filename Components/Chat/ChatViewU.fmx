@@ -39,6 +39,7 @@ object ChatView: TChatView
           Text = 'SEND'
           TextSettings.Font.Family = 'Roboto'
           TextSettings.Font.Size = 16.000000000000000000
+          OnClick = btnSendClick
         end
       end
     end
@@ -49,19 +50,15 @@ object ChatView: TChatView
     Size.Height = 371.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
-    object Memo1: TMemo
-      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
-      DataDetectorTypes = []
+    object flwlytMsg: TFlowLayout
       Align = Client
-      CanFocus = False
-      Enabled = False
-      HitTest = False
       Size.Width = 660.000000000000000000
       Size.Height = 371.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 0
-      Viewport.Width = 656.000000000000000000
-      Viewport.Height = 367.000000000000000000
+      Justify = Center
+      JustifyLastLine = Center
+      FlowDirection = LeftToRight
     end
   end
 end

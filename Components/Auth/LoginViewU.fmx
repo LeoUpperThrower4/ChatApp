@@ -27,6 +27,7 @@ object LoginView: TLoginView
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       Align = Bottom
       TabOrder = 0
+      Text = 'ldsds94@gmail.com'
       Position.Y = 28.000000000000000000
       Margins.Top = 6.000000000000000000
       Size.Width = 320.000000000000000000
@@ -59,6 +60,7 @@ object LoginView: TLoginView
       Touch.InteractiveGestures = [LongTap, DoubleTap]
       Align = Bottom
       TabOrder = 0
+      Text = 'leo123'
       Position.Y = 28.000000000000000000
       Margins.Top = 6.000000000000000000
       Size.Width = 320.000000000000000000

@@ -43,6 +43,7 @@ type
     procedure SetOnSuccessfullLogin(Callback : OnUserSuccessfullyLoggedIn);
     constructor Create(AComponent : TComponent);
     procedure rectBtnSubmitClick(Sender: TObject);
+    procedure OnUserLoggedIn(User: IFirebaseUser);
   private
     { Private declarations }
     SignUpFrame         : TSignUpView;
@@ -67,7 +68,7 @@ implementation
 constructor TAuthView.Create(AComponent : TComponent);
 begin
   inherited Create(AComponent);
-  AuthManager := TAuthManager.Create;
+  g_AuthManager := TAuthManager.Create;
   SetLoginBtnActive;
 end;
 
@@ -75,6 +76,7 @@ procedure TAuthView.OnError(const RequestID, ErrMsg: string);
 var
   msg : String;
 begin
+  StopLoadingState;
   ShowMessage(ErrMsg);
   if Assigned(SignUpFrame) then
   begin
@@ -92,10 +94,16 @@ begin
 
 end;
 
+procedure TAuthView.OnUserLoggedIn(User: IFirebaseUser);
+begin
+  ShowMessage('Logado');
+end;
+
 procedure TAuthView.OnUserResponse(const Info: string; User: IFirebaseUser);
 var
   email: string;
 begin
+  StopLoadingState;
   if Info.Contains('Sign in') then
   begin
     FOnSuccessfullLogin(User);
@@ -123,13 +131,12 @@ begin
   StartLoadingState;
   if FAuthMode = amLogin then
   begin
-    AuthManager.EmailLogin(LoginFrame.edtEmail.Text.Trim, LoginFrame.edtPwd.Text.Trim, OnUserResponse, OnError);
+    g_AuthManager.EmailLogin(LoginFrame.edtEmail.Text.Trim, LoginFrame.edtPwd.Text.Trim, OnUserResponse, OnError);
   end
   else
   begin
-    AuthManager.EmailSignUp(SignUpFrame.edtEmail.Text.Trim, SignUpFrame.edtPwd.Text.Trim, OnUserResponse, OnError);
+    g_AuthManager.EmailSignUp(SignUpFrame.edtEmail.Text.Trim, SignUpFrame.edtPwd.Text.Trim, OnUserResponse, OnError);
   end;
-  StopLoadingState;
 end;
 
 procedure TAuthView.SetLoginBtnActive;
@@ -180,6 +187,7 @@ begin
   begin
     SignUpFrame.edtEmail.Enabled := False;
     SignUpFrame.edtPwd.Enabled   := False;
+    SignUpFrame.edtName.Enabled  := False;
   end
   else
   begin
@@ -195,6 +203,7 @@ begin
   begin
     SignUpFrame.edtEmail.Enabled := True;
     SignUpFrame.edtPwd.Enabled   := True;
+    SignUpFrame.edtName.Enabled  := True;
   end
   else
   begin

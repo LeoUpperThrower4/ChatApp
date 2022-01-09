@@ -1,0 +1,34 @@
+object SingleMsgView: TSingleMsgView
+  Left = 0
+  Top = 0
+  Caption = 'Form1'
+  ClientHeight = 81
+  ClientWidth = 316
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object lblName: TLabel
+    Align = Left
+    StyledSettings = [Family, Size, FontColor]
+    Size.Width = 153.000000000000000000
+    Size.Height = 81.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.StyleExt = {00040000000100000004000000}
+    TextSettings.HorzAlign = Center
+    Text = 'DUMMY'
+    TabOrder = 1
+  end
+  object lblMsg: TLabel
+    Align = Right
+    StyledSettings = [Family, Size, FontColor]
+    Position.X = 163.000000000000000000
+    Size.Width = 153.000000000000000000
+    Size.Height = 81.000000000000000000
+    Size.PlatformDefault = False
+    TextSettings.Font.StyleExt = {00040000000100000004000000}
+    TextSettings.HorzAlign = Center
+    Text = 'DUMMY'
+    TabOrder = 0
+  end
+end

@@ -132,6 +132,7 @@ object AuthView: TAuthView
       TabOrder = 3
       object rectBtnSubmit: TRectangle
         Align = Client
+        Cursor = crHandPoint
         Fill.Color = xFF04C582
         Size.Width = 204.000000000000000000
         Size.Height = 40.000000000000000000
