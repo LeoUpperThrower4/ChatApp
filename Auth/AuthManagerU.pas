@@ -54,7 +54,7 @@ begin
   error := '';
   Result := False;
   Reg := TRegistry.Create;
-//  Isso pode ser colocado em um instalador para que a chave não fique no repositório
+
 //  Reg.OpenKey('\ChatApp\Firebase', True);
 //  Reg.WriteString('WebAPIKey', 'AIzaSyDUcS4IWiC7PVYH-5LT69gy--NJHmPZXs4');
   try
