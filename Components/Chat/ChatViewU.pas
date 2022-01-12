@@ -94,7 +94,7 @@ begin
   try
     msgJSON := TJSONObject.Create;
 
-    dataPair := TJSONPair.Create('Message',edtMsg.Text);
+    dataPair := TJSONPair.Create('Message',edtMsg.Text.Trim);
     msgJSON.AddPair(dataPair);
 
     dataPair := TJSONPair.Create('SentAt',DateToStr(now));
@@ -114,9 +114,12 @@ procedure TChatView.btnSendClick(Sender: TObject);
 var
   ChatMsgJSON : TJSONObject;
 begin
-  ChatMsgJSON := CreateMsgJSONObject;
+  if edtMsg.Text.Trim <> '' then
+  begin
+    ChatMsgJSON := CreateMsgJSONObject;
 
-  g_ChatManager.SendMessage(ChatMsgJSON, OnMessageSent, OnMessageFailToSend);
+    g_ChatManager.SendMessage(ChatMsgJSON, OnMessageSent, OnMessageFailToSend);
+  end;
 end;
 
 procedure TChatView.OnMessagesUpdated(ResourceParams: TRequestResourceParam; Val: TJSONValue);
