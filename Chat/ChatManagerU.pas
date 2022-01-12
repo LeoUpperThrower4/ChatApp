@@ -13,13 +13,14 @@ uses
 type
   TChatManager = class
     private
-      FMessages   : TJSONArray;
-      FRealTimeDB : IRealTimeDB;
+      FMessages               : TJSONArray;
+      FRealTimeDB             : IRealTimeDB;
       FOnUpdateLatestMessages : TOnRTDBValue;
-      procedure OnUpdateLatestMessages    (ResourceParams: TRequestResourceParam; Val: TJSONValue);
-      procedure OnUpdateLatestMessagesFail(const RequestID, ErrMsg: string);
+      procedure OnUpdateLatestMessages     (ResourceParams: TRequestResourceParam; Val: TJSONValue);
+      procedure OnUpdateLatestMessagesFail (const RequestID, ErrMsg: string);
     public
-      procedure UpdateLatestMessages(OnUpdate: TOnRTDBValue = nil; OnError: TOnRequestError = nil);
+      procedure UpdateLatestMessages       (OnUpdate: TOnRTDBValue = nil; OnError: TOnRequestError = nil);
+      procedure SendMessage                (Msg: TJSONObject; OnMessageSent: TOnRTDBValue; OnMessageFailToSend: TOnRequestError);
       constructor Create;
   end;
 
@@ -41,23 +42,31 @@ constructor TChatManager.Create;
 begin
   inherited;
 
-  // Cria instância para o RealtimeDB
   FRealTimeDB := TRealTimeDB.CreateByURL(RealtimeDatabaseURL, g_AuthManager.Authenticator);
-
-  // Atualiza a lista de mensagens
-  UpdateLatestMessages(nil, OnUpdateLatestMessagesFail);
+  FMessages   := TJSONArray.Create;
 end;
 
 procedure TChatManager.OnUpdateLatestMessages(ResourceParams: TRequestResourceParam; Val: TJSONValue);
 begin
-  FMessages := Val as TJSONArray;
+  if Val.ToString <> 'null' then
+    FMessages := Val.Clone as TJSONArray;
+
   if Assigned(FOnUpdateLatestMessages)
     then FOnUpdateLatestMessages(ResourceParams, Val);
 end;
 
 procedure TChatManager.OnUpdateLatestMessagesFail(const RequestID, ErrMsg: string);
 begin
-  // O que fazer? Como avisar? Eviar como mensagem de api do Windows?
+  // O que fazer? Como avisar? Eviar como mensagem de API do Windows?
+end;
+
+procedure TChatManager.SendMessage(Msg: TJSONObject; OnMessageSent: TOnRTDBValue; OnMessageFailToSend: TOnRequestError);
+begin
+  if FMessages <> nil then
+  begin
+    FMessages.Add(Msg);
+    FRealTimeDB.Put(['Global', 'messages'], FMessages, OnMessageSent, OnMessageFailToSend);
+  end;
 end;
 
 procedure TChatManager.UpdateLatestMessages(OnUpdate: TOnRTDBValue = nil; OnError: TOnRequestError = nil);

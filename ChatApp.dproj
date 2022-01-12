@@ -4,7 +4,7 @@
         <ProjectVersion>19.2</ProjectVersion>
         <FrameworkType>FMX</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -175,7 +175,6 @@
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
-        <DCC_UnitSearchPath>C:\Users\lduarte\Desktop\Estudos\ChatApp\Components\Auth;C:\Users\lduarte\Desktop\Estudos\ChatApp\Components\Chat;C:\Users\lduarte\Desktop\Estudos\ChatApp\Components;C:\Users\lduarte\Desktop\Estudos\ChatApp\FB4D\Source;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
@@ -235,6 +234,8 @@
             <Form>SingleMsgView</Form>
             <FormType>fmx</FormType>
         </DCCReference>
+        <DCCReference Include="Utils\RealtimeDatabaseUtils.pas"/>
+        <DCCReference Include="Chat\ChatManagerU.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
