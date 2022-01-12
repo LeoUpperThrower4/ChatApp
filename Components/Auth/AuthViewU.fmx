@@ -144,7 +144,7 @@ object AuthView: TAuthView
           StyledSettings = []
           TextSettings.Font.Family = 'Roboto'
           TextSettings.Font.Size = 16.000000000000000000
-          TextSettings.FontColor = xFFF0F0F0
+          TextSettings.FontColor = claWhite
           TextSettings.HorzAlign = Center
           Text = 'Submit'
           TabOrder = 0
