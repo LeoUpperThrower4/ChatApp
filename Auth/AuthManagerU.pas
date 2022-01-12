@@ -2,23 +2,20 @@ unit AuthManagerU;
 
 interface
 uses 
-  FB4D.Interfaces;
+  FB4D.Interfaces,
+  RealtimeDatabaseUtils;
   
 type
   TAuthManager = class
   private
     FAuthenticated  : Boolean;
-    FApiKey         : String;
-    FHasValidApiKey : Boolean;
     FOnUserLoggedIn : TOnUserResponse;
-    function SearchApiKeyInReg(var error : string)  : Boolean;
     procedure SetOnUserLoggedIn(OnUserResponse: TOnUserResponse);
     procedure OnUserLoggedIn(const Info: string; User: IFirebaseUser);
   public
     CurrentUser              : IFirebaseUser;
     Authenticator            : IFirebaseAuthentication;
     property isAuthenticated : Boolean read FAuthenticated;
-    function HasValidApiKey  : Boolean;
     function EmailLogin (email, pwd: string; OnUserResponse: TOnUserResponse; OnError: TOnRequestError) : Boolean;
     function EmailSignUp(email, pwd: string; OnUserResponse: TOnUserResponse; OnError: TOnRequestError) : Boolean;
     constructor Create;
@@ -40,36 +37,7 @@ var
   error : string;
 begin
   FAuthenticated  := False;
-  FHasValidApiKey := SearchApiKeyInReg(error);
-  if HasValidApiKey then
-  begin
-    Authenticator := TFirebaseAuthentication.Create(FApiKey);
-  end;
-end;
-
-function TAuthManager.SearchApiKeyInReg(var error : string): Boolean;
-var
-  Reg : TRegistry;
-begin
-  error := '';
-  Result := False;
-  Reg := TRegistry.Create;
-//  Isso pode ser colocado em um instalador para que a chave não fique no repositório
-//  Reg.OpenKey('\ChatApp\Firebase', True);
-//  Reg.WriteString('WebAPIKey', 'AIzaSyDUcS4IWiC7PVYH-5LT69gy--NJHmPZXs4');
-  try
-    if Reg.OpenKey('\ChatApp\Firebase', False) then
-    begin
-      FApiKey := Reg.ReadString('WebAPIKey');
-      Result := True;
-    end
-    else
-    begin
-      error := 'API Key not valid';
-    end;
-  finally
-    Reg.Free;
-  end;
+  Authenticator := TFirebaseAuthentication.Create(RealtimeDatabaseWebAPIKey);
 end;
 
 procedure TAuthManager.SetOnUserLoggedIn(OnUserResponse: TOnUserResponse);
@@ -103,11 +71,6 @@ begin
     Result := True;
     Authenticator.SignUpWithEmailAndPassword(email, pwd, OnUserResponse, OnError);
   end;
-end;
-
-function TAuthManager.HasValidApiKey : Boolean;
-begin
-  Result := FHasValidApiKey;
 end;
 
 end.

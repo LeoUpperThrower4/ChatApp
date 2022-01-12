@@ -32,6 +32,7 @@ object ChatView: TChatView
         Size.PlatformDefault = False
         object btnSend: TSpeedButton
           Align = Client
+          Enabled = False
           StyledSettings = [Style, FontColor]
           Size.Width = 70.000000000000000000
           Size.Height = 60.000000000000000000

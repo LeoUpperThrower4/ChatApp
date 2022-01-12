@@ -23,15 +23,19 @@ type
     rectBtnSendWrapper: TRectangle;
     Layout1           : TLayout;
     flwlytMsg         : TFlowLayout;
-    procedure btnSendClick(Sender: TObject);
+    function  CreateMsgJSONObject : TJSONObject;
+    procedure btnSendClick        (Sender: TObject);
+    procedure OnMessagesUpdated   (ResourceParams: TRequestResourceParam; Val: TJSONValue);
+    procedure OnMessageSent       (ResourceParams: TRequestResourceParam; Val: TJSONValue);
+    procedure OnMessageFailToSend (const RequestID, ErrMsg: string);
   private
     fEvent            : IFirebaseEvent;
     fConfig           : IFirebaseConfiguration;
     RTDB              : TRealTimeDB;
-    procedure OnDBStop(Sender: TObject);
-    procedure StartListening;
-    procedure OnDBEvent(const Event: string; Params: TRequestResourceParam; JSONObj: TJSONObject);
-    procedure OnDBError(const RequestID, ErrMsg: string);
+//    procedure OnDBStop(Sender: TObject);
+//    procedure StartListening;
+//    procedure OnDBEvent(const Event: string; Params: TRequestResourceParam; JSONObj: TJSONObject);
+//    procedure OnDBError(const RequestID, ErrMsg: string);
     { Private declarations }
   public
     { Public declarations }
@@ -42,64 +46,82 @@ implementation
 {$R *.fmx}
 { TChatView }
 
-procedure TChatView.StartListening;
-begin
-  // Inicializa a variavel de evento
-  fConfig := TFirebaseConfiguration.Create('AIzaSyDUcS4IWiC7PVYH-5LT69gy--NJHmPZXs4', 'chatapp-31972', 'gs://chatapp-31972.appspot.com', 'https://chatapp-31972-default-rtdb.firebaseio.com/');
-  fEvent  := TFirebaseEvent.Create;
+//procedure TChatView.StartListening;
+//begin
+//  // Inicializa a variavel de evento
+//  fConfig := TFirebaseConfiguration.Create('AIzaSyDUcS4IWiC7PVYH-5LT69gy--NJHmPZXs4', 'chatapp-31972', 'gs://chatapp-31972.appspot.com', 'https://chatapp-31972-default-rtdb.firebaseio.com/');
+//  fEvent  := TFirebaseEvent.Create;
+//
+//  // Comeca a ouvir por mudancas no server
+//  fEvent := RTDB.ListenForValueEvents(['Global', 'messages'], OnDBEvent, OnDBStop,
+//    OnDBError, nil);
+//end;
+//
+//procedure TChatView.OnDBStop(Sender: TObject);
+//begin
+//  ShowMessage('DB Listener was stopped - restart App');
+//end;
+//
+//procedure TChatView.OnDBEvent(const Event: string;
+//  Params: TRequestResourceParam; JSONObj: TJSONObject);
+//begin
+//  ShowMessage(JSONObj.GetValue<string>(cData));
+////    btnWrite.Enabled := false;
+////    lblStatus.Text := 'Last read: ' + DateTimeToStr(now);
+//end;
 
-  // Comeca a ouvir por mudancas no server
-  fEvent := RTDB.ListenForValueEvents(['Global', 'messages'], OnDBEvent, OnDBStop,
-    OnDBError, nil);
+//procedure TChatView.OnDBError(const RequestID, ErrMsg: string);
+//begin
+//  ShowMessage(RequestID + ': ' + ErrMsg);
+//end;
+
+procedure TChatView.OnMessageFailToSend(const RequestID, ErrMsg: string);
+begin
+  ShowMessage(ErrMsg);
 end;
 
-procedure TChatView.OnDBStop(Sender: TObject);
+procedure TChatView.OnMessageSent(ResourceParams: TRequestResourceParam; Val: TJSONValue);
 begin
-  ShowMessage('DB Listener was stopped - restart App');
+  edtMsg.Text := '';
+  // Atualizar parte visual do chat (falta a issue $10 ficar pronta)
 end;
 
-procedure TChatView.OnDBEvent(const Event: string;
-  Params: TRequestResourceParam; JSONObj: TJSONObject);
-begin
-  ShowMessage(JSONObj.GetValue<string>(cData));
-//    btnWrite.Enabled := false;
-//    lblStatus.Text := 'Last read: ' + DateTimeToStr(now);
-end;
-
-procedure TChatView.OnDBError(const RequestID, ErrMsg: string);
-begin
-  ShowMessage(RequestID + ': ' + ErrMsg);
-end;
-
-procedure TChatView.btnSendClick(Sender: TObject);
+function TChatView.CreateMsgJSONObject: TJSONObject;
 var
   msgJSON  : TJSONObject;
   dataPair : TJSONPair;
 begin
   try
-    // Cria objeto da mensagem...
     msgJSON := TJSONObject.Create;
 
-    // Adiciona Message ao objeto
     dataPair := TJSONPair.Create('Message',edtMsg.Text);
     msgJSON.AddPair(dataPair);
 
-    // Adiciona SentAt ao objeto
     dataPair := TJSONPair.Create('SentAt',DateToStr(now));
     msgJSON.AddPair(dataPair);
 
-    // Adiciona SentBy ao objeto
     dataPair := TJSONPair.Create('SentBy',g_AuthManager.CurrentUser.EMail);
     msgJSON.AddPair(dataPair);
 
-    // Envia mensagem ao servidor
-
-
-    // Adicionar mensagem na tela
+    Result := msgJSON.Clone as TJSONObject;
   finally
     if msgJSON <> nil
       then msgJSON.Free;
   end;
+end;
+
+procedure TChatView.btnSendClick(Sender: TObject);
+var
+  ChatMsgJSON : TJSONObject;
+begin
+  ChatMsgJSON := CreateMsgJSONObject;
+
+  g_ChatManager.SendMessage(ChatMsgJSON, OnMessageSent, OnMessageFailToSend);
+end;
+
+procedure TChatView.OnMessagesUpdated(ResourceParams: TRequestResourceParam; Val: TJSONValue);
+begin
+  btnSend.Enabled := True;
 end;
 
 constructor TChatView.Create(AOwner: TComponent);
@@ -108,11 +130,12 @@ begin
 
   fEvent := TFirebaseEvent.Create;
 
-  // Inicializa o Realtime Database
   g_ChatManager := TChatManager.Create;
 
+  g_ChatManager.UpdateLatestMessages(OnMessagesUpdated, nil);
+
   // Inicia o listener do banco de dados para esperar por novas mensagens
-  //StartListening;
+  // StartListening;
 end;
 
 end.
