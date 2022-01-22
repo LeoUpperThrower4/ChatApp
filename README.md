@@ -1,15 +1,15 @@
 # ChatApp
 
-![GitHub repo size](https://img.shields.io/github/repo-size/LeoUpperThrower4/Blog-Space-Traveling?style=for-the-badge)
-![GitHub language count](https://img.shields.io/github/languages/count/LeoUpperThrower4/Blog-Space-Traveling?style=for-the-badge)
-![GitHub forks](https://img.shields.io/github/forks/LeoUpperThrower4/Blog-Space-Traveling?style=for-the-badge)
-![Bitbucket open issues](https://img.shields.io/bitbucket/issues/LeoUpperThrower4/Blog-Space-Traveling?style=for-the-badge)
-![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/LeoUpperThrower4/Blog-Space-Traveling?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/repo-size/LeoUpperThrower4/ChatApp?style=for-the-badge)
+![GitHub language count](https://img.shields.io/github/languages/count/LeoUpperThrower4/ChatApp?style=for-the-badge)
+![GitHub forks](https://img.shields.io/github/forks/LeoUpperThrower4/ChatApp?style=for-the-badge)
+![Bitbucket open issues](https://img.shields.io/bitbucket/issues/LeoUpperThrower4/ChatApp?style=for-the-badge)
+![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/LeoUpperThrower4/ChatApp?style=for-the-badge)
 
 <!-- Alterar cover quando o projeto estiver 100% funcional -->
 <img src="img/cover.gif" alt="cover">
 
-> Software de conversas. Mensagens por texto.
+> Software de conversas por mensagens de texto.
 
 O ChatApp é um software de conversas por mensagem criado usando Delphi. Ele usa de princípios de separação de conceitos e componentização para facilitar a escalabilidade e manutenibilidade. Seu design pode ser encontrado [aqui](https://www.figma.com/file/p2L7kPD7TsWBkr0tU8t1A2/Chat-App?node-id=0%3A1)
 
