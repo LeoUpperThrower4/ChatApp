@@ -9,8 +9,12 @@ uses
 
 type
   TSingleMsgView = class(TForm)
-    lblName: TLabel;
+    lblDateTime: TLabel;
     lblMsg: TLabel;
+    pnlMsg: TPanel;
+    pnlSentByDate: TPanel;
+    lblSentBy: TLabel;
+    pnlSingleMsgView: TPanel;
   private
     { Private declarations }
   public
