@@ -1,18 +1,18 @@
 object ChatView: TChatView
   Align = Client
-  Size.Width = 660.000000000000000000
+  Size.Width = 400.000000000000000000
   Size.Height = 431.000000000000000000
   Size.PlatformDefault = False
   object lytWriteMsg: TLayout
     Align = Bottom
     Position.Y = 371.000000000000000000
-    Size.Width = 660.000000000000000000
+    Size.Width = 400.000000000000000000
     Size.Height = 60.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
     object rectWriteMsgBg: TRectangle
       Align = Client
-      Size.Width = 660.000000000000000000
+      Size.Width = 400.000000000000000000
       Size.Height = 60.000000000000000000
       Size.PlatformDefault = False
       Stroke.Kind = None
@@ -20,13 +20,13 @@ object ChatView: TChatView
         Touch.InteractiveGestures = [LongTap, DoubleTap]
         Align = Client
         TabOrder = 0
-        Size.Width = 590.000000000000000000
+        Size.Width = 330.000000000000000000
         Size.Height = 60.000000000000000000
         Size.PlatformDefault = False
       end
       object rectBtnSendWrapper: TRectangle
         Align = Right
-        Position.X = 590.000000000000000000
+        Position.X = 330.000000000000000000
         Size.Width = 70.000000000000000000
         Size.Height = 60.000000000000000000
         Size.PlatformDefault = False
@@ -45,20 +45,21 @@ object ChatView: TChatView
       end
     end
   end
-  object Layout1: TLayout
+  object vrtscrlbxMessagesView: TVertScrollBox
     Align = Client
-    Size.Width = 660.000000000000000000
+    Size.Width = 400.000000000000000000
     Size.Height = 371.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
-    object flwlytMsg: TFlowLayout
-      Align = Client
-      Size.Width = 660.000000000000000000
-      Size.Height = 371.000000000000000000
+    Viewport.Width = 400.000000000000000000
+    Viewport.Height = 371.000000000000000000
+    object lytMessagesView: TFlowLayout
+      Size.Width = 400.000000000000000000
+      Size.Height = 50.000000000000000000
       Size.PlatformDefault = False
       TabOrder = 0
-      Justify = Center
-      JustifyLastLine = Center
+      Justify = Left
+      JustifyLastLine = Left
       FlowDirection = LeftToRight
     end
   end

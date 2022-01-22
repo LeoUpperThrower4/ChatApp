@@ -21,6 +21,7 @@ type
     public
       procedure UpdateLatestMessages       (OnUpdate: TOnRTDBValue = nil; OnError: TOnRequestError = nil);
       procedure SendMessage                (Msg: TJSONObject; OnMessageSent: TOnRTDBValue; OnMessageFailToSend: TOnRequestError);
+      property  Messages: TJSONArray read FMessages;
       constructor Create;
   end;
 

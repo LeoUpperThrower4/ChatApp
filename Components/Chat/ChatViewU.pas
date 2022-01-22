@@ -21,8 +21,8 @@ type
     edtMsg            : TEdit;
     btnSend           : TSpeedButton;
     rectBtnSendWrapper: TRectangle;
-    Layout1           : TLayout;
-    flwlytMsg         : TFlowLayout;
+    vrtscrlbxMessagesView: TVertScrollBox;
+    lytMessagesView: TFlowLayout;
     function  CreateMsgJSONObject : TJSONObject;
     procedure btnSendClick        (Sender: TObject);
     procedure OnMessagesUpdated   (ResourceParams: TRequestResourceParam; Val: TJSONValue);
@@ -32,6 +32,7 @@ type
     fEvent            : IFirebaseEvent;
     fConfig           : IFirebaseConfiguration;
     RTDB              : TRealTimeDB;
+    procedure UpdateLytMessagesView;
 //    procedure OnDBStop(Sender: TObject);
 //    procedure StartListening;
 //    procedure OnDBEvent(const Event: string; Params: TRequestResourceParam; JSONObj: TJSONObject);
@@ -43,6 +44,10 @@ type
   end;
 
 implementation
+
+uses
+  frmMainViewU;
+
 {$R *.fmx}
 { TChatView }
 
@@ -83,7 +88,7 @@ end;
 procedure TChatView.OnMessageSent(ResourceParams: TRequestResourceParam; Val: TJSONValue);
 begin
   edtMsg.Text := '';
-  // Atualizar parte visual do chat (falta a issue $10 ficar pronta)
+  UpdateLytMessagesView;
 end;
 
 function TChatView.CreateMsgJSONObject: TJSONObject;
@@ -122,9 +127,32 @@ begin
   end;
 end;
 
+procedure TChatView.UpdateLytMessagesView;
+var
+  ChatMsgJSON   : TJSONValue;
+  SingleMsgView : TSingleMsgView;
+begin
+  for ChatMsgJSON in g_ChatManager.Messages do
+  begin
+    SingleMsgView := TSingleMsgView.Create(lytMessagesView);
+    SingleMsgView.pnlSingleMsgView.Parent := lytMessagesView;
+    SingleMsgView.lblSentBy.Text          := ChatMsgJSON.GetValue<String>('SentBy','...');
+    SingleMsgView.lblMsg.Text             := ChatMsgJSON.GetValue<String>('Message','...');
+    SingleMsgView.lblDateTime.Text        := ChatMsgJSON.GetValue<String>('SentAt','...');
+    lytMessagesView.Parent                := vrtscrlbxMessagesView;
+    lytMessagesView.AddObject(SingleMsgView.pnlSingleMsgView);
+    // TODO: Adicionar um separador
+  end;
+
+  lytMessagesView.Height := ((g_ChatManager.Messages.Count + 1) * SingleMsgView.pnlSingleMsgView.Height) / 2;
+  lytMessagesView.Width  := 400;
+end;
+
 procedure TChatView.OnMessagesUpdated(ResourceParams: TRequestResourceParam; Val: TJSONValue);
 begin
   btnSend.Enabled := True;
+
+  UpdateLytMessagesView;
 end;
 
 constructor TChatView.Create(AOwner: TComponent);
@@ -136,6 +164,8 @@ begin
   g_ChatManager := TChatManager.Create;
 
   g_ChatManager.UpdateLatestMessages(OnMessagesUpdated, nil);
+
+  frmMainView.Width := 400;
 
   // Inicia o listener do banco de dados para esperar por novas mensagens
   // StartListening;
