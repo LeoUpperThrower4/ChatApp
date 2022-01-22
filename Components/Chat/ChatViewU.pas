@@ -16,22 +16,22 @@ uses
   FB4D.RealTimeDB, FB4D.Interfaces, FB4D.Configuration;
 type
   TChatView = class(TFrame)
-    lytWriteMsg       : TLayout;
-    rectWriteMsgBg    : TRectangle;
-    edtMsg            : TEdit;
-    btnSend           : TSpeedButton;
-    rectBtnSendWrapper: TRectangle;
-    vrtscrlbxMessagesView: TVertScrollBox;
-    lytMessagesView: TFlowLayout;
+    lytWriteMsg           : TLayout;
+    rectWriteMsgBg        : TRectangle;
+    edtMsg                : TEdit;
+    btnSend               : TSpeedButton;
+    rectBtnSendWrapper    : TRectangle;
+    vrtscrlbxMessagesView : TVertScrollBox;
+    lytMessagesView       : TFlowLayout;
     function  CreateMsgJSONObject : TJSONObject;
     procedure btnSendClick        (Sender: TObject);
     procedure OnMessagesUpdated   (ResourceParams: TRequestResourceParam; Val: TJSONValue);
     procedure OnMessageSent       (ResourceParams: TRequestResourceParam; Val: TJSONValue);
     procedure OnMessageFailToSend (const RequestID, ErrMsg: string);
   private
-    fEvent            : IFirebaseEvent;
-    fConfig           : IFirebaseConfiguration;
-    RTDB              : TRealTimeDB;
+    fEvent                : IFirebaseEvent;
+    fConfig               : IFirebaseConfiguration;
+    RTDB                  : TRealTimeDB;
     procedure UpdateLytMessagesView;
 //    procedure OnDBStop(Sender: TObject);
 //    procedure StartListening;
@@ -124,6 +124,8 @@ begin
     ChatMsgJSON := CreateMsgJSONObject;
 
     g_ChatManager.SendMessage(ChatMsgJSON, OnMessageSent, OnMessageFailToSend);
+
+    UpdateLytMessagesView;
   end;
 end;
 
@@ -132,6 +134,7 @@ var
   ChatMsgJSON   : TJSONValue;
   SingleMsgView : TSingleMsgView;
 begin
+  lytMessagesView.Controls.DeleteRange(0, lytMessagesView.Controls.Count);
   for ChatMsgJSON in g_ChatManager.Messages do
   begin
     SingleMsgView := TSingleMsgView.Create(lytMessagesView);
@@ -139,12 +142,11 @@ begin
     SingleMsgView.lblSentBy.Text          := ChatMsgJSON.GetValue<String>('SentBy','...');
     SingleMsgView.lblMsg.Text             := ChatMsgJSON.GetValue<String>('Message','...');
     SingleMsgView.lblDateTime.Text        := ChatMsgJSON.GetValue<String>('SentAt','...');
-    lytMessagesView.Parent                := vrtscrlbxMessagesView;
     lytMessagesView.AddObject(SingleMsgView.pnlSingleMsgView);
     // TODO: Adicionar um separador
   end;
 
-  lytMessagesView.Height := ((g_ChatManager.Messages.Count + 1) * SingleMsgView.pnlSingleMsgView.Height) / 2;
+  lytMessagesView.Height := (g_ChatManager.Messages.Count * SingleMsgView.pnlSingleMsgView.Height);
   lytMessagesView.Width  := 400;
 end;
 
@@ -166,6 +168,8 @@ begin
   g_ChatManager.UpdateLatestMessages(OnMessagesUpdated, nil);
 
   frmMainView.Width := 400;
+
+  lytMessagesView.Parent := vrtscrlbxMessagesView;
 
   // Inicia o listener do banco de dados para esperar por novas mensagens
   // StartListening;
