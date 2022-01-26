@@ -27,11 +27,11 @@ type
   TfrmMainView = class(TForm)
     procedure FormCreate(Sender: TObject);
     procedure OnSuccessfullLogin(User: IFirebaseUser);
-    procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
+    destructor Destroy; override;
 
   end;
 
@@ -51,18 +51,20 @@ begin
   AuthView.Parent := Self;
 end;
 
-procedure TfrmMainView.FormDestroy(Sender: TObject);
-begin
-  if Assigned(ChatView)
-    then ChatView.Free;
-end;
-
 procedure TfrmMainView.OnSuccessfullLogin(User: IFirebaseUser);
 begin
   AuthView.Free;
 
-  ChatView := TChatView.Create(Self);
+  ChatView        := TChatView.Create(Self);
   ChatView.Parent := Self;
+end;
+
+destructor TfrmMainView.Destroy;
+begin
+  if Assigned(AuthView)
+    then AuthView.Free;
+
+  inherited;
 end;
 
 end.

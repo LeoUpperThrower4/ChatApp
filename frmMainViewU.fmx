@@ -1,6 +1,6 @@
 object frmMainView: TfrmMainView
-  Left = 660
-  Top = 285
+  Left = 320
+  Top = 100
   Caption = 'Chat App'
   ClientHeight = 480
   ClientWidth = 640
@@ -9,8 +9,7 @@ object frmMainView: TfrmMainView
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
-  OnDestroy = FormDestroy
-  Left = 660
-  Top = 285
+  Left = 320
+  Top = 100
   DesignerMasterStyle = 0
 end

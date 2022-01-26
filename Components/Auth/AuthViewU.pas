@@ -41,14 +41,12 @@ type
     procedure SetLoginForm;
     procedure SetSignUpForm;
     procedure SetOnSuccessfullLogin(Callback : OnUserSuccessfullyLoggedIn);
-    constructor Create(AComponent : TComponent);
     procedure rectBtnSubmitClick(Sender: TObject);
     procedure OnUserLoggedIn(User: IFirebaseUser);
   private
     { Private declarations }
     SignUpFrame         : TSignUpView;
     LoginFrame          : TLoginView;
-    AuthManager         : TAuthManager;
     FAuthMode           : TAuthMode;
     FOnSuccessfullLogin : OnUserSuccessfullyLoggedIn;
     procedure SetLoginBtnActive;
@@ -57,6 +55,8 @@ type
     procedure StopLoadingState;
   public
     { Public declarations }
+    constructor Create(AComponent : TComponent);
+    destructor Destroy;
   end;
 
 implementation
@@ -70,6 +70,11 @@ begin
   inherited Create(AComponent);
   g_AuthManager := TAuthManager.Create;
   SetLoginBtnActive;
+end;
+
+destructor TAuthView.Destroy;
+begin
+  g_AuthManager.Free;
 end;
 
 procedure TAuthView.OnError(const RequestID, ErrMsg: string);
@@ -91,7 +96,6 @@ begin
       // Perform a simple animation
     end;
   end;
-
 end;
 
 procedure TAuthView.OnUserLoggedIn(User: IFirebaseUser);
@@ -176,7 +180,7 @@ begin
   begin
     SignUpFrame := TSignUpView.Create(lytForm);
     SignUpFrame.Parent := lytForm;
-    rectMiddle.Height := rectMiddle.Height + 50;
+    rectMiddle.Height  := rectMiddle.Height + 50;
   end;
 end;
 

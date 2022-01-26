@@ -19,6 +19,7 @@ type
     function EmailLogin (email, pwd: string; OnUserResponse: TOnUserResponse; OnError: TOnRequestError) : Boolean;
     function EmailSignUp(email, pwd: string; OnUserResponse: TOnUserResponse; OnError: TOnRequestError) : Boolean;
     constructor Create;
+    destructor Destroy; override;
   end;
 
 var
@@ -27,17 +28,17 @@ var
 implementation
 
 uses
-  Win.Registry, Winapi.Windows,
-  FB4D.Authentication;
+  FB4D.Authentication,
+  Winapi.Windows;
 
 { TAuth }
 
 constructor TAuthManager.Create;
-var
-  error : string;
 begin
-  FAuthenticated  := False;
-  Authenticator := TFirebaseAuthentication.Create(RealtimeDatabaseWebAPIKey);
+  inherited;
+
+  FAuthenticated := False;
+  Authenticator  := TFirebaseAuthentication.Create(RealtimeDatabaseWebAPIKey);
 end;
 
 procedure TAuthManager.SetOnUserLoggedIn(OnUserResponse: TOnUserResponse);
@@ -60,6 +61,11 @@ begin
     Result := True;
     SetOnUserLoggedIn(OnUserResponse);
     Authenticator.SignInWithEmailAndPassword(email, pwd, OnUserLoggedIn, OnError)
+  end
+  else
+  begin
+    Authenticator := TFirebaseAuthentication.Create(RealtimeDatabaseWebAPIKey);
+    EmailLogin(email, pwd, OnUserResponse, OnError);
   end;
 end;
 
@@ -70,7 +76,19 @@ begin
   begin
     Result := True;
     Authenticator.SignUpWithEmailAndPassword(email, pwd, OnUserResponse, OnError);
+  end
+  else
+  begin
+    Authenticator := TFirebaseAuthentication.Create(RealtimeDatabaseWebAPIKey);
+    EmailSignUp(email, pwd, OnUserResponse, OnError)
   end;
+end;
+
+destructor TAuthManager.Destroy;
+begin
+  FOnUserLoggedIn := nil;
+
+  inherited;
 end;
 
 end.
