@@ -56,7 +56,6 @@ type
   public
     { Public declarations }
     constructor Create(AComponent : TComponent);
-    destructor Destroy;
   end;
 
 implementation
@@ -68,13 +67,8 @@ implementation
 constructor TAuthView.Create(AComponent : TComponent);
 begin
   inherited Create(AComponent);
-  g_AuthManager := TAuthManager.Create;
-  SetLoginBtnActive;
-end;
 
-destructor TAuthView.Destroy;
-begin
-  g_AuthManager.Free;
+  SetLoginBtnActive;
 end;
 
 procedure TAuthView.OnError(const RequestID, ErrMsg: string);
@@ -100,7 +94,7 @@ end;
 
 procedure TAuthView.OnUserLoggedIn(User: IFirebaseUser);
 begin
-  ShowMessage('Logado');
+  ShowMessage('Logged');
 end;
 
 procedure TAuthView.OnUserResponse(const Info: string; User: IFirebaseUser);
@@ -219,7 +213,7 @@ end;
 procedure TAuthView.SetLoginForm;
 begin
   if SignUpFrame <> nil
-  then FreeAndNil(SignUpFrame);
+    then FreeAndNil(SignUpFrame);
 
   if LoginFrame = nil then
   begin

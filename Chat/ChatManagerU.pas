@@ -15,30 +15,37 @@ uses
   ChatInterfaces;
 
 type
+  TMessageRec =  record
+    SentBy : String;
+    SentAt : String;
+    Msg    : String
+  end;
+
   TChatManager = class
     private
       FFirebaseConfig              : IFirebaseConfiguration;
       FEvent                       : IFirebaseEvent;
-      FMessages                    : TJSONArray;
+      FMessages                    : TList<TMessageRec>;
       FRealTimeDB                  : IRealTimeDB;
       FOnUpdateLatestMessages      : TOnRTDBValue;
       FOnMessageSent               : TOnRTDBValue;
       FOnErrorUpdateLatestMessages : TOnRequestError;
       FOnErrorSendMessage          : TOnRequestError;
       FChatUpdateSubscribers       : TInterfaceList;
+      function  GetMsgRecord               (Val : TJSONValue) : TMessageRec;
       procedure OnUpdateLatestMessages     (ResourceParams: TRequestResourceParam; Val: TJSONValue);
       procedure OnUpdateLatestMessagesFail (const RequestID, ErrMsg: string);
-      procedure OnMessageSent       (ResourceParams: TRequestResourceParam; Val: TJSONValue);
-      procedure OnMessageFailToSend (const RequestID, ErrMsg: string);
+      procedure OnMessageSent              (ResourceParams: TRequestResourceParam; Val: TJSONValue);
+      procedure OnMessageFailToSend        (const RequestID, ErrMsg: string);
     public
       procedure UpdateLatestMessages (OnUpdate: TOnRTDBValue = nil; OnError: TOnRequestError = nil);
-      procedure SendMessage          (Msg: TJSONValue; OnSent: TOnRTDBValue = nil; OnFailToSend: TOnRequestError = nil);
-      property  Messages: TJSONArray read FMessages;
+      procedure SendMessage          (Msg: TMessageRec; OnSent: TOnRTDBValue = nil; OnFailToSend: TOnRequestError = nil);
+      property  Messages: TList<TMessageRec> read FMessages;
       procedure OnDBStop(Sender: TObject);
       procedure StartListening;
       procedure OnDBEvent(const Event: string; Params: TRequestResourceParam; JSONObj: TJSONObject);
       procedure OnDBError(const RequestID, ErrMsg: string);
-      procedure AddChatUpdateSubscriber(a_Notifiable : IChatUpdateNotifiable);
+      procedure AddChatUpdateSubscriber   (a_Notifiable : IChatUpdateNotifiable);
       procedure NotifyChatUpdateSubscribers;
       constructor Create;
       destructor Destroy; override;
@@ -59,11 +66,9 @@ begin
   inherited;
 
   FChatUpdateSubscribers := TInterfaceList.Create;
-  FMessages              := TJSONArray.Create;
+  FMessages              := TList<TMessageRec>.Create;
   FRealTimeDB            := TRealTimeDB.CreateByURL(RealtimeDatabaseURL, g_AuthManager.Authenticator);
   FFirebaseConfig        := TFirebaseConfiguration.Create('AIzaSyDUcS4IWiC7PVYH-5LT69gy--NJHmPZXs4', 'chatapp-31972', 'gs://chatapp-31972.appspot.com', 'https://chatapp-31972-default-rtdb.firebaseio.com/');
-
-  StartListening;
 end;
 
 procedure TChatManager.StartListening;
@@ -72,19 +77,38 @@ begin
     OnDBError, nil);
 end;
 
+function TChatManager.GetMsgRecord(Val : TJSONValue) : TMessageRec;
+begin
+  Result.Msg    := Val.GetValue<string>('Message', '');
+  Result.SentAt := Val.GetValue<string>('SentAt' , '');
+  Result.SentBy := Val.GetValue<string>('SentBy' , '');
+end;
+
 procedure TChatManager.OnDBEvent(const Event: string;
   Params: TRequestResourceParam; JSONObj: TJSONObject);
 var
-  JSONValue: TJSONValue;
+  CurrMsg        : TJSONObject;
+  Messages       : TJSONArray;
+  MsgsEnumerator : TJSONArray.TEnumerator;
+  MsgRec         : TMessageRec;
 begin
   if (Event = 'put') then
   begin
-    JSONValue := JSONObj.GetValue<TJSONValue>('data');
+    Messages := JSONObj.GetValue<TJSONArray>('data');
 
-    if JSONValue.ToString <> c_strNULL then
+    if Messages.ToString <> c_strNULL then
     begin
-      FMessages := JSONValue.Clone as TJSONArray;
-      NotifyChatUpdateSubscribers;
+      try
+        MsgsEnumerator := Messages.GetEnumerator;
+        FMessages.Clear; // Should have an algorithm to enable not rewriting the whole list everytime
+        while MsgsEnumerator.MoveNext do
+        begin
+           FMessages.Add(GetMsgRecord(MsgsEnumerator.Current));
+        end;
+        NotifyChatUpdateSubscribers;
+      finally
+        MsgsEnumerator.Free;
+      end;
     end
     else
       UpdateLatestMessages;
@@ -93,7 +117,7 @@ end;
 
 procedure TChatManager.OnDBStop(Sender: TObject);
 begin
-//  TODO: Fazer um log ('DB Listener was stopped - restart App');
+//  TODO: Fazer um log ('DB Listener stopped - restart App');
 end;
 
 procedure TChatManager.OnDBError(const RequestID, ErrMsg: string);
@@ -101,14 +125,47 @@ begin
 //  TODO: Fazer um log (RequestID + ': ' + ErrMsg);
 end;
 
-procedure TChatManager.SendMessage(Msg: TJSONValue; OnSent: TOnRTDBValue = nil; OnFailToSend: TOnRequestError = nil);
+procedure TChatManager.SendMessage(Msg: TMessageRec; OnSent: TOnRTDBValue = nil; OnFailToSend: TOnRequestError = nil);
+  function ConvertMessagesToUpload: TJSONArray;
+  var
+    MsgRec  : TMessageRec;
+    MsgPair : TJSONPair;
+    MsgObj  : TJSONObject;
+  begin
+    Result := TJSONArray.Create;
+
+    for MsgRec in FMessages do
+    begin
+      MsgObj := TJSONObject.Create;
+
+      MsgPair := TJSONPair.Create('Message', MsgRec.Msg);
+      MsgObj.AddPair(MsgPair);
+
+      MsgPair := TJSONPair.Create('SentAt', MsgRec.SentAt);
+      MsgObj.AddPair(MsgPair);
+
+      MsgPair := TJSONPair.Create('SentBy', MsgRec.SentBy);
+      MsgObj.AddPair(MsgPair);
+
+      Result.AddElement(MsgObj);
+    end;
+  end;
+var
+  MessagesReadyToUpload : TJSONArray;
 begin
-  FOnMessageSent      := OnSent;
-  FOnErrorSendMessage := OnFailToSend;
+  try
+    FOnMessageSent      := OnSent;
+    FOnErrorSendMessage := OnFailToSend;
 
-  (FMessages as TJSONArray).AddElement(Msg);
+    FMessages.Add(Msg);
 
-  FRealTimeDB.Put(['Global', 'messages'], FMessages, OnMessageSent, OnMessageFailToSend);
+    MessagesReadyToUpload := ConvertMessagesToUpload;
+
+    // TODO: Logar envio de mensagem
+    FRealTimeDB.Put(['Global', 'messages'], MessagesReadyToUpload, OnMessageSent, OnMessageFailToSend);
+  finally
+    MessagesReadyToUpload.Free;
+  end;
 end;
 
 procedure TChatManager.OnMessageSent(ResourceParams: TRequestResourceParam;
@@ -140,8 +197,7 @@ procedure TChatManager.OnUpdateLatestMessages(ResourceParams: TRequestResourcePa
 begin
   if Val.ToString <> c_strNULL then
   begin
-    FMessages.Free;
-    FMessages := Val as TJSONArray;
+//    FMessages := Val as TJSONArray;
   end;
 
   if Assigned(FOnUpdateLatestMessages)
@@ -172,16 +228,19 @@ var
 begin
   for Subscriber in FChatUpdateSubscribers do
   begin
+    // TODO: Logar que Subbscriber X foi notificado sobre mudança no chat
     (Subscriber as IChatUpdateNotifiable).UpdateChatView;
   end;
 end;
 
 destructor TChatManager.Destroy;
 begin
-  FEvent.StopListening;
+  FChatUpdateSubscribers.Clear;
+  FChatUpdateSubscribers.Free;
 
   FMessages.Free;
-  FChatUpdateSubscribers.Free;
+
+  // TODO: Logar destroys
 
   inherited;
 end;

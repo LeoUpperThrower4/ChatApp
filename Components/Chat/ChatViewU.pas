@@ -17,17 +17,19 @@ uses
   // Utils
   JSON,
   // FB4D
-  FB4D.RealTimeDB, FB4D.Interfaces, FB4D.Configuration;
+  FB4D.RealTimeDB,
+  FB4D.Interfaces,
+  FB4D.Configuration;
 type
   TChatView = class(TFrame, IChatUpdateNotifiable)
-    lytWriteMsg           : TLayout;
-    rectWriteMsgBg        : TRectangle;
-    edtMsg                : TEdit;
-    btnSend               : TSpeedButton;
-    rectBtnSendWrapper    : TRectangle;
-    vrtscrlbxMessagesView : TVertScrollBox;
-    lytMessagesView       : TFlowLayout;
-    function  CreateMsgJSONObject : TJSONObject;
+    lytWriteMsg            : TLayout;
+    rectWriteMsgBg         : TRectangle;
+    edtMsg                 : TEdit;
+    btnSend                : TSpeedButton;
+    rectBtnSendWrapper     : TRectangle;
+    vrtscrlbxMessagesView  : TVertScrollBox;
+    lytMessagesView        : TFlowLayout;
+    function  CreateMsgRec : TMessageRec;
     procedure OnMessageSent       (ResourceParams: TRequestResourceParam; Val: TJSONValue);
     procedure OnMessageFailToSend (const RequestID, ErrMsg: string);
     procedure btnSendClick        (Sender: TObject);
@@ -39,7 +41,6 @@ type
     { Public declarations }
     procedure UpdateChatView;
     constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
   end;
 
 implementation
@@ -51,23 +52,13 @@ uses
 
 { TChatView }
 
-function TChatView.CreateMsgJSONObject: TJSONObject;
-var
-  msgJSON  : TJSONObject;
-  dataPair : TJSONPair;
+function TChatView.CreateMsgRec: TMessageRec;
 begin
-  msgJSON := TJSONObject.Create;
+  Result.Msg := edtMsg.Text.Trim;
 
-  dataPair := TJSONPair.Create('Message',edtMsg.Text.Trim);
-  msgJSON.AddPair(dataPair);
+  Result.SentAt := DateToStr(now);
 
-  dataPair := TJSONPair.Create('SentAt',DateToStr(now));
-  msgJSON.AddPair(dataPair);
-
-  dataPair := TJSONPair.Create('SentBy',g_AuthManager.CurrentUser.EMail);
-  msgJSON.AddPair(dataPair);
-
-  Result := msgJSON;
+  Result.SentBy := g_AuthManager.CurrentUser.EMail;
 end;
 
 procedure TChatView.BlockSendingMessages;
@@ -84,15 +75,15 @@ end;
 
 procedure TChatView.btnSendClick(Sender: TObject);
 var
-  ChatMsgJSON : TJSONValue;
+  ChatMsgRec : TMessageRec;
 begin
   if edtMsg.Text <> EmptyStr then
   begin
     BlockSendingMessages;
 
-    ChatMsgJSON := CreateMsgJSONObject;
+    ChatMsgRec := CreateMsgRec;
 
-    g_ChatManager.SendMessage(ChatMsgJSON, OnMessageSent, OnMessageFailToSend);
+    g_ChatManager.SendMessage(ChatMsgRec, OnMessageSent, OnMessageFailToSend);
   end;
 end;
 
@@ -111,20 +102,20 @@ end;
 
 procedure TChatView.UpdateChatView;
 var
-  ChatMsgJSON   : TJSONValue;
+  MessageRec   : TMessageRec;
   SingleMsgView : TSingleMsgView;
 begin
   lytMessagesView.Controls.DeleteRange(0, lytMessagesView.Controls.Count);
   try
-    SingleMsgView := TSingleMsgView.Create(lytMessagesView);
-    for ChatMsgJSON in g_ChatManager.Messages do
+    SingleMsgView := TSingleMsgView.Create(Self);
+    for MessageRec in g_ChatManager.Messages do
     begin
       SingleMsgView                         := TSingleMsgView.Create(lytMessagesView);
-      SingleMsgView.lblSentBy.Text          := ChatMsgJSON.GetValue<String>('SentBy','...');
-      SingleMsgView.lblMsg.Text             := ChatMsgJSON.GetValue<String>('Message','...');
-      SingleMsgView.lblDateTime.Text        := ChatMsgJSON.GetValue<String>('SentAt','...');
+      SingleMsgView.lblSentBy.Text          := MessageRec.SentBy;
+      SingleMsgView.lblMsg.Text             := MessageRec.Msg;
+      SingleMsgView.lblDateTime.Text        := MessageRec.SentAt;
       lytMessagesView.AddObject(SingleMsgView.pnlSingleMsgView);
-      // TODO: Adicionar um separador
+//       TODO: Adicionar um separador
     end;
   finally
   end;
@@ -136,26 +127,17 @@ end;
 
 constructor TChatView.Create(AOwner: TComponent);
 begin
-  inherited;
+  inherited Create(AOwner);
 
   BlockSendingMessages;
-
-  if not Assigned(g_ChatManager)
-    then g_ChatManager := TChatManager.Create;
 
   g_ChatManager.AddChatUpdateSubscriber(Self);
 
   frmMainView.Width := 400;
 
   lytMessagesView.Parent := vrtscrlbxMessagesView;
-end;
 
-destructor TChatView.Destroy;
-begin
-  if g_ChatManager <> nil
-    then g_ChatManager.Free;
-
-  inherited;
+  g_ChatManager.StartListening;
 end;
 
 end.

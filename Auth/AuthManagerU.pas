@@ -19,7 +19,6 @@ type
     function EmailLogin (email, pwd: string; OnUserResponse: TOnUserResponse; OnError: TOnRequestError) : Boolean;
     function EmailSignUp(email, pwd: string; OnUserResponse: TOnUserResponse; OnError: TOnRequestError) : Boolean;
     constructor Create;
-    destructor Destroy; override;
   end;
 
 var
@@ -84,11 +83,5 @@ begin
   end;
 end;
 
-destructor TAuthManager.Destroy;
-begin
-  FOnUserLoggedIn := nil;
-
-  inherited;
-end;
 
 end.
