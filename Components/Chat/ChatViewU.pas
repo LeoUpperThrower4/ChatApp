@@ -33,6 +33,8 @@ type
     procedure OnMessageSent       (ResourceParams: TRequestResourceParam; Val: TJSONValue);
     procedure OnMessageFailToSend (const RequestID, ErrMsg: string);
     procedure btnSendClick        (Sender: TObject);
+    procedure edtMsgKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char;
+      Shift: TShiftState);
   private
     { Private declarations }
     procedure BlockSendingMessages;
@@ -55,10 +57,15 @@ uses
 function TChatView.CreateMsgRec: TMessageRec;
 begin
   Result.Msg := edtMsg.Text.Trim;
-
   Result.SentAt := DateToStr(now);
-
   Result.SentBy := g_AuthManager.CurrentUser.EMail;
+end;
+
+procedure TChatView.edtMsgKeyDown(Sender: TObject; var Key: Word;
+  var KeyChar: Char; Shift: TShiftState);
+begin
+  if Key = 13
+    then btnSendClick(Self);
 end;
 
 procedure TChatView.BlockSendingMessages;
