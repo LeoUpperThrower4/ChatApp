@@ -20,6 +20,7 @@ uses
   AuthViewU,
   // Chat
   ChatViewU,
+  ChatManagerU,
   //FB4D
   FB4D.Interfaces;
 
@@ -27,11 +28,13 @@ type
   TfrmMainView = class(TForm)
     procedure FormCreate(Sender: TObject);
     procedure OnSuccessfullLogin(User: IFirebaseUser);
-    procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
+    procedure InitializeManagers;
+    procedure DestroyManagers;
   public
     { Public declarations }
+    destructor Destroy; override;
 
   end;
 
@@ -46,23 +49,48 @@ implementation
 
 procedure TfrmMainView.FormCreate(Sender: TObject);
 begin
-  AuthView := TAuthView.Create(Self);
-  AuthView.SetOnSuccessfullLogin(OnSuccessfullLogin);
-  AuthView.Parent := Self;
-end;
+  InitializeManagers;
 
-procedure TfrmMainView.FormDestroy(Sender: TObject);
-begin
-  if Assigned(ChatView)
-    then ChatView.Free;
+  AuthView := TAuthView.Create(Self);
+  AuthView.Parent := Self;
+  AuthView.SetOnSuccessfullLogin(OnSuccessfullLogin);
+
 end;
 
 procedure TfrmMainView.OnSuccessfullLogin(User: IFirebaseUser);
 begin
   AuthView.Free;
 
-  ChatView := TChatView.Create(Self);
+  ChatView        := TChatView.Create(Self);
   ChatView.Parent := Self;
+end;
+
+procedure TfrmMainView.InitializeManagers;
+begin
+  if not Assigned(g_AuthManager)
+    then g_AuthManager := TAuthManager.Create;
+
+  if not Assigned(g_ChatManager)
+    then g_ChatManager := TChatManager.Create;
+end;
+
+procedure TfrmMainView.DestroyManagers;
+begin
+  if Assigned(g_AuthManager)
+    then g_AuthManager.Free;
+
+  if Assigned(g_ChatManager)
+    then g_ChatManager.Free;
+end;
+
+destructor TfrmMainView.Destroy;
+begin
+  if Assigned(AuthView)
+    then AuthView.Free;
+
+  DestroyManagers;
+
+  inherited;
 end;
 
 end.

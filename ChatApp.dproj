@@ -4,7 +4,7 @@
         <ProjectVersion>19.2</ProjectVersion>
         <FrameworkType>FMX</FrameworkType>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -213,13 +213,7 @@
             <FormType>fmx</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="Components\Auth\AuthBtnViewU.pas">
-            <Form>Frame1</Form>
-            <FormType>fmx</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="Auth\AuthManagerU.pas"/>
-        <DCCReference Include="Auth\AuthViewDataTypesU.pas"/>
         <DCCReference Include="Components\Auth\SignUpViewU.pas">
             <Form>Frame2</Form>
             <FormType>fmx</FormType>
@@ -236,6 +230,7 @@
         </DCCReference>
         <DCCReference Include="Utils\RealtimeDatabaseUtils.pas"/>
         <DCCReference Include="Chat\ChatManagerU.pas"/>
+        <DCCReference Include="Chat\ChatInterfaces.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

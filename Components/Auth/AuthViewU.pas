@@ -41,14 +41,12 @@ type
     procedure SetLoginForm;
     procedure SetSignUpForm;
     procedure SetOnSuccessfullLogin(Callback : OnUserSuccessfullyLoggedIn);
-    constructor Create(AComponent : TComponent);
     procedure rectBtnSubmitClick(Sender: TObject);
     procedure OnUserLoggedIn(User: IFirebaseUser);
   private
     { Private declarations }
     SignUpFrame         : TSignUpView;
     LoginFrame          : TLoginView;
-    AuthManager         : TAuthManager;
     FAuthMode           : TAuthMode;
     FOnSuccessfullLogin : OnUserSuccessfullyLoggedIn;
     procedure SetLoginBtnActive;
@@ -57,6 +55,7 @@ type
     procedure StopLoadingState;
   public
     { Public declarations }
+    constructor Create(AComponent : TComponent);
   end;
 
 implementation
@@ -68,7 +67,7 @@ implementation
 constructor TAuthView.Create(AComponent : TComponent);
 begin
   inherited Create(AComponent);
-  g_AuthManager := TAuthManager.Create;
+
   SetLoginBtnActive;
 end;
 
@@ -91,12 +90,11 @@ begin
       // Perform a simple animation
     end;
   end;
-
 end;
 
 procedure TAuthView.OnUserLoggedIn(User: IFirebaseUser);
 begin
-  ShowMessage('Logado');
+  ShowMessage('Logged');
 end;
 
 procedure TAuthView.OnUserResponse(const Info: string; User: IFirebaseUser);
@@ -176,7 +174,7 @@ begin
   begin
     SignUpFrame := TSignUpView.Create(lytForm);
     SignUpFrame.Parent := lytForm;
-    rectMiddle.Height := rectMiddle.Height + 50;
+    rectMiddle.Height  := rectMiddle.Height + 50;
   end;
 end;
 
@@ -215,7 +213,7 @@ end;
 procedure TAuthView.SetLoginForm;
 begin
   if SignUpFrame <> nil
-  then FreeAndNil(SignUpFrame);
+    then FreeAndNil(SignUpFrame);
 
   if LoginFrame = nil then
   begin
