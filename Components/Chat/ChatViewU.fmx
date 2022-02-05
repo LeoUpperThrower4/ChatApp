@@ -25,6 +25,7 @@ object ChatView: TChatView
         Size.Width = 330.000000000000000000
         Size.Height = 60.000000000000000000
         Size.PlatformDefault = False
+        OnKeyDown = edtMsgKeyDown
       end
       object rectBtnSendWrapper: TRectangle
         Align = Right

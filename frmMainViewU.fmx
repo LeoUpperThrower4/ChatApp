@@ -1,6 +1,7 @@
 object frmMainView: TfrmMainView
   Left = 320
   Top = 100
+  BorderStyle = Single
   Caption = 'Chat App'
   ClientHeight = 480
   ClientWidth = 640
