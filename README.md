@@ -11,7 +11,7 @@
 
 > Software de conversas por mensagens de texto.
 
-O ChatApp é um software de conversas por mensagem criado usando Delphi. Ele usa de princípios de separação de conceitos e componentização para facilitar a escalabilidade e manutenibilidade. Seu design pode ser encontrado [aqui](https://www.figma.com/file/p2L7kPD7TsWBkr0tU8t1A2/Chat-App?node-id=0%3A1)
+O ChatApp é um software de conversas por mensagem criado usando Delphi. Ele usa de princípios de separação de conceitos e componentização para facilitar a escalabilidade e manutenibilidade.
 
 
 ## 💻 Tecnologias
@@ -37,13 +37,15 @@ Depois de autenticado, é possível enviar mensagens no chat global.
 
 > Sua contribuição é muito bem vinda! 😀
 
-Para contribuir com o ChatApp, siga estas etapas:
+### Para contribuir com o ChatApp, siga estas etapas:
 
 1. Bifurque este repositório.
 2. Crie um branch: `git checkout -b <nome_branch>`.
-3. Faça suas alterações e confirme-as: `git commit -m '<mensagem_commit>'`
+3. Faça suas alterações e as confirme: `git commit -m '<mensagem_commit>'`
 4. Envie para o branch original: `git push origin ChatApp / <local>`
 5. Crie a solicitação de pull.
+
+### Você também pode criar [issues](https://github.com/LeoUpperThrower4/ChatApp/issues) direto no Github para ajudar a mapear bugs e sugerir novas funcionalidades!
 
 Como alternativa, consulte a documentação do GitHub em [como criar uma solicitação pull](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request).
 
