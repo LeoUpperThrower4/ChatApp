@@ -1,70 +1,102 @@
 object SingleMsgView: TSingleMsgView
-  Left = 0
-  Top = 45
+  Left = 480
+  Top = 280
   Border.Styling = False
   BorderIcons = []
-  Caption = 'Form1'
-  ClientHeight = 99
-  ClientWidth = 400
+  BorderStyle = None
+  ClientHeight = 130
+  ClientWidth = 380
   Position = Designed
   WindowState = wsMaximized
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
-  Top = 45
+  Left = 480
+  Top = 280
   DesignerMasterStyle = 0
-  object pnlSingleMsgView: TPanel
-    Anchors = [akLeft, akTop, akRight]
-    Size.Width = 400.000000000000000000
-    Size.Height = 99.000000000000000000
+  object crSingleMessageView: TCalloutRectangle
+    Fill.Color = claWhite
+    Padding.Left = 1.000000000000000000
+    Padding.Top = 1.000000000000000000
+    Padding.Right = 1.000000000000000000
+    Padding.Bottom = 1.000000000000000000
+    Margins.Bottom = 10.000000000000000000
+    Size.Width = 380.000000000000000000
+    Size.Height = 120.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 0
-    object pnlMsg: TPanel
-      Align = Top
-      Size.Width = 400.000000000000000000
-      Size.Height = 57.000000000000000000
+    XRadius = 10.000000000000000000
+    YRadius = 10.000000000000000000
+    CalloutWidth = 25.000000000000000000
+    CalloutLength = 15.000000000000000000
+    CalloutPosition = Left
+    CalloutOffset = 80.000000000000000000
+    object rectDate: TRectangle
+      Align = Left
+      Fill.Kind = None
+      Position.X = 271.000000000000000000
+      Position.Y = 1.000000000000000000
+      Size.Width = 102.000000000000000000
+      Size.Height = 118.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 0
-      object lblMsg: TLabel
+      Stroke.Kind = None
+      XRadius = 10.000000000000000000
+      YRadius = 10.000000000000000000
+      object lblDateTime: TLabel
         Align = Client
         StyledSettings = [Family, Size, FontColor]
-        Size.Width = 400.000000000000000000
-        Size.Height = 57.000000000000000000
+        Margins.Right = 36.000000000000000000
+        Margins.Bottom = 6.000000000000000000
+        Size.Width = 66.000000000000000000
+        Size.Height = 112.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.StyleExt = {00040000000100000004000000}
+        TextSettings.HorzAlign = Trailing
+        TextSettings.VertAlign = Trailing
+        Text = 'DUMMY'
+        TabOrder = 1
+      end
+    end
+    object rectLeft: TRectangle
+      Align = MostLeft
+      Fill.Kind = None
+      Margins.Left = 16.000000000000000000
+      Position.X = 17.000000000000000000
+      Position.Y = 1.000000000000000000
+      Size.Width = 254.000000000000000000
+      Size.Height = 118.000000000000000000
+      Size.PlatformDefault = False
+      Stroke.Kind = None
+      XRadius = 10.000000000000000000
+      YRadius = 10.000000000000000000
+      object lblMsg: TLabel
+        Align = Bottom
+        AutoSize = True
+        StyledSettings = [Family, Size, FontColor]
+        Margins.Left = 6.000000000000000000
+        Margins.Bottom = 10.000000000000000000
+        Position.X = 6.000000000000000000
+        Position.Y = 92.000000000000000000
+        Size.Width = 248.000000000000000000
+        Size.Height = 16.000000000000000000
         Size.PlatformDefault = False
         TextSettings.Font.StyleExt = {00070000000000000004000000}
-        TextSettings.HorzAlign = Center
         Text = 'DUMMY'
         TabOrder = 0
       end
-    end
-    object pnlSentByDate: TPanel
-      Align = Bottom
-      Position.Y = 56.000000000000000000
-      Size.Width = 400.000000000000000000
-      Size.Height = 43.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 1
       object lblSentBy: TLabel
-        Align = Client
+        Align = Top
+        AutoSize = True
         StyledSettings = [Family, Size, FontColor]
-        Size.Width = 247.000000000000000000
-        Size.Height = 43.000000000000000000
+        Margins.Left = 6.000000000000000000
+        Margins.Top = 10.000000000000000000
+        Position.X = 6.000000000000000000
+        Position.Y = 10.000000000000000000
+        Size.Width = 248.000000000000000000
+        Size.Height = 16.000000000000000000
         Size.PlatformDefault = False
         TextSettings.Font.StyleExt = {00040000000100000004000000}
-        TextSettings.HorzAlign = Center
         Text = 'DUMMY'
         TabOrder = 2
-      end
-      object lblDateTime: TLabel
-        Align = Left
-        StyledSettings = [Family, Size, FontColor]
-        Size.Width = 153.000000000000000000
-        Size.Height = 43.000000000000000000
-        Size.PlatformDefault = False
-        TextSettings.Font.StyleExt = {00040000000100000004000000}
-        TextSettings.HorzAlign = Center
-        Text = 'DUMMY'
-        TabOrder = 1
       end
     end
   end

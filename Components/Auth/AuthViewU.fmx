@@ -21,6 +21,8 @@ object AuthView: TAuthView
     Size.Height = 293.000000000000000000
     Size.PlatformDefault = False
     Stroke.Kind = None
+    XRadius = 15.000000000000000000
+    YRadius = 15.000000000000000000
     object lytProfilePic: TLayout
       Align = Top
       Padding.Left = 75.000000000000000000
@@ -138,6 +140,8 @@ object AuthView: TAuthView
         Size.Height = 40.000000000000000000
         Size.PlatformDefault = False
         Stroke.Kind = None
+        XRadius = 15.000000000000000000
+        YRadius = 15.000000000000000000
         OnClick = rectBtnSubmitClick
         object lblBtnSubmit: TLabel
           Align = Center
