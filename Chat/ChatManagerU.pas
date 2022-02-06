@@ -92,27 +92,23 @@ var
   MsgsEnumerator : TJSONArray.TEnumerator;
   MsgRec         : TMessageRec;
 begin
-  if (Event = 'put') then
+  if (Event = 'put') and (JSONObj.GetValue('data').ToString <> c_strNULL) then
   begin
     Messages := JSONObj.GetValue<TJSONArray>('data');
-
-    if Messages.ToString <> c_strNULL then
-    begin
-      try
-        MsgsEnumerator := Messages.GetEnumerator;
-        FMessages.Clear; // Should have an algorithm to enable not rewriting the whole list everytime
-        while MsgsEnumerator.MoveNext do
-        begin
-           FMessages.Add(GetMsgRecord(MsgsEnumerator.Current));
-        end;
-        NotifyChatUpdateSubscribers;
-      finally
-        MsgsEnumerator.Free;
+    try
+      MsgsEnumerator := Messages.GetEnumerator;
+      FMessages.Clear; // Should have an algorithm to enable not rewriting the whole list everytime
+      while MsgsEnumerator.MoveNext do
+      begin
+         FMessages.Add(GetMsgRecord(MsgsEnumerator.Current));
       end;
-    end
-    else
-      UpdateLatestMessages;
-  end;
+      NotifyChatUpdateSubscribers;
+    finally
+      MsgsEnumerator.Free;
+    end;
+  end
+  else
+    UpdateLatestMessages;
 end;
 
 procedure TChatManager.OnDBStop(Sender: TObject);
