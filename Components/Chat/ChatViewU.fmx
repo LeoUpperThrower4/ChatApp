@@ -1,61 +1,18 @@
 object ChatView: TChatView
   Align = Client
+  ClipParent = True
   Size.Width = 400.000000000000000000
   Size.Height = 431.000000000000000000
   Size.PlatformDefault = False
-  object lytWriteMsg: TLayout
-    Align = Bottom
-    Position.Y = 371.000000000000000000
-    Size.Width = 400.000000000000000000
-    Size.Height = 60.000000000000000000
-    Size.PlatformDefault = False
-    TabOrder = 0
-    object rectWriteMsgBg: TRectangle
-      Align = Client
-      HitTest = False
-      Size.Width = 400.000000000000000000
-      Size.Height = 60.000000000000000000
-      Size.PlatformDefault = False
-      Stroke.Kind = None
-      object edtMsg: TEdit
-        Touch.InteractiveGestures = [LongTap, DoubleTap]
-        Align = Client
-        TabOrder = 0
-        ClipParent = True
-        Size.Width = 330.000000000000000000
-        Size.Height = 60.000000000000000000
-        Size.PlatformDefault = False
-        OnKeyDown = edtMsgKeyDown
-      end
-      object rectBtnSendWrapper: TRectangle
-        Align = Right
-        HitTest = False
-        Position.X = 330.000000000000000000
-        Size.Width = 70.000000000000000000
-        Size.Height = 60.000000000000000000
-        Size.PlatformDefault = False
-        object btnSend: TSpeedButton
-          Align = Client
-          StyledSettings = [Style, FontColor]
-          Size.Width = 70.000000000000000000
-          Size.Height = 60.000000000000000000
-          Size.PlatformDefault = False
-          Text = 'SEND'
-          TextSettings.Font.Family = 'Roboto'
-          TextSettings.Font.Size = 16.000000000000000000
-          OnClick = btnSendClick
-        end
-      end
-    end
-  end
   object vrtscrlbxMessagesView: TVertScrollBox
     Align = Client
     Size.Width = 400.000000000000000000
-    Size.Height = 371.000000000000000000
+    Size.Height = 381.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 1
+    TabOrder = 0
+    ShowScrollBars = False
     Viewport.Width = 400.000000000000000000
-    Viewport.Height = 371.000000000000000000
+    Viewport.Height = 381.000000000000000000
     object lytMessagesView: TFlowLayout
       Size.Width = 400.000000000000000000
       Size.Height = 50.000000000000000000
@@ -64,6 +21,34 @@ object ChatView: TChatView
       Justify = Left
       JustifyLastLine = Left
       FlowDirection = LeftToRight
+    end
+  end
+  object rectWriteMsgBg: TRectangle
+    Align = Bottom
+    ClipChildren = True
+    Fill.Color = claWhite
+    HitTest = False
+    Position.Y = 381.000000000000000000
+    Size.Width = 400.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    Stroke.Kind = None
+    object edtMsg: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Client
+      StyleLookup = 'transparentedit'
+      TabOrder = 0
+      Size.Width = 400.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      OnKeyDown = edtMsgKeyDown
+    end
+    object edtSeparator: TLine
+      Align = Top
+      LineType = Top
+      Size.Width = 400.000000000000000000
+      Size.Height = 1.000000000000000000
+      Size.PlatformDefault = False
     end
   end
 end

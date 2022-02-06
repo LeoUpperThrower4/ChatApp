@@ -22,18 +22,16 @@ uses
   FB4D.Configuration;
 type
   TChatView = class(TFrame, IChatUpdateNotifiable)
-    lytWriteMsg            : TLayout;
-    rectWriteMsgBg         : TRectangle;
     edtMsg                 : TEdit;
-    btnSend                : TSpeedButton;
-    rectBtnSendWrapper     : TRectangle;
     vrtscrlbxMessagesView  : TVertScrollBox;
     lytMessagesView        : TFlowLayout;
+    rectWriteMsgBg: TRectangle;
+    edtSeparator: TLine;
     function  CreateMsgRec : TMessageRec;
+    procedure HandleEnterClick;
     procedure OnMessageSent       (ResourceParams: TRequestResourceParam; Val: TJSONValue);
     procedure OnMessageFailToSend (const RequestID, ErrMsg: string);
-    procedure btnSendClick        (Sender: TObject);
-    procedure edtMsgKeyDown(Sender: TObject; var Key: Word; var KeyChar: Char;
+    procedure edtMsgKeyDown       (Sender: TObject; var Key: Word; var KeyChar: Char;
       Shift: TShiftState);
   private
     { Private declarations }
@@ -65,26 +63,24 @@ procedure TChatView.edtMsgKeyDown(Sender: TObject; var Key: Word;
   var KeyChar: Char; Shift: TShiftState);
 begin
   if Key = 13
-    then btnSendClick(Self);
+    then HandleEnterClick;
 end;
 
 procedure TChatView.BlockSendingMessages;
 begin
   edtMsg.Enabled  := False;
-  btnSend.Enabled := False;
 end;
 
 procedure TChatView.EnableSendingMessages;
 begin
   edtMsg.Enabled  := True;
-  btnSend.Enabled := True;
 end;
 
-procedure TChatView.btnSendClick(Sender: TObject);
+procedure TChatView.HandleEnterClick;
 var
   ChatMsgRec : TMessageRec;
 begin
-  if edtMsg.Text <> EmptyStr then
+  if (edtMsg.Text <> EmptyStr) and (edtMsg.Enabled) then
   begin
     BlockSendingMessages;
 
@@ -98,6 +94,7 @@ procedure TChatView.OnMessageSent(ResourceParams: TRequestResourceParam; Val: TJ
 begin
   edtMsg.Text := '';
   EnableSendingMessages;
+  edtMsg.SetFocus;
 end;
 
 procedure TChatView.OnMessageFailToSend(const RequestID, ErrMsg: string);
@@ -117,16 +114,27 @@ begin
     SingleMsgView := TSingleMsgView.Create(Self);
     for MessageRec in g_ChatManager.Messages do
     begin
-      SingleMsgView                         := TSingleMsgView.Create(lytMessagesView);
-      SingleMsgView.lblSentBy.Text          := MessageRec.SentBy;
-      SingleMsgView.lblMsg.Text             := MessageRec.Msg;
-      SingleMsgView.lblDateTime.Text        := MessageRec.SentAt;
-      lytMessagesView.AddObject(SingleMsgView.pnlSingleMsgView);
-//       TODO: Adicionar um separador
+      SingleMsgView                  := TSingleMsgView.Create(lytMessagesView);
+      SingleMsgView.lblSentBy.Text   := MessageRec.SentBy;
+      SingleMsgView.lblMsg.Text      := MessageRec.Msg;
+      SingleMsgView.lblDateTime.Text := MessageRec.SentAt;
+
+      if MessageRec.SentBy = g_AuthManager.CurrentUser.EMail then
+      begin
+        SingleMsgView.crSingleMessageView.CalloutPosition := TCalloutPosition.Right;
+        SingleMsgView.crSingleMessageView.Margins.Left := 15;
+        SingleMsgView.crSingleMessageView.Fill.Color := $FF09A770;
+
+        SingleMsgView.rectLeft.Margins.Left := 1;
+        SingleMsgView.rectLeft.Align := TAlignLayout.MostLeft;
+        SingleMsgView.rectDate.Align := TAlignLayout.Left;
+      end;
+
+      lytMessagesView.AddObject(SingleMsgView.crSingleMessageView);
     end;
   finally
   end;
-  lytMessagesView.Height := (g_ChatManager.Messages.Count * SingleMsgView.pnlSingleMsgView.Height);
+  lytMessagesView.Height := (g_ChatManager.Messages.Count * 130 + 10);
   lytMessagesView.Width  := frmMainView.Width;
 
   EnableSendingMessages;
