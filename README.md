@@ -1,10 +1,10 @@
 # ChatApp
 
-![GitHub repo size](https://img.shields.io/github/repo-size/LeoUpperThrower4/ChatApp?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/languages/code-size/LeoUpperThrower4/ChatApp?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/LeoUpperThrower4/ChatApp?style=for-the-badge)
 ![GitHub forks](https://img.shields.io/github/forks/LeoUpperThrower4/ChatApp?style=for-the-badge)
-![Bitbucket open issues](https://img.shields.io/bitbucket/issues/LeoUpperThrower4/ChatApp?style=for-the-badge)
-![Bitbucket open pull requests](https://img.shields.io/bitbucket/pr-raw/LeoUpperThrower4/ChatApp?style=for-the-badge)
+![GitHub open issues](https://img.shields.io/github/issues/LeoUpperThrower4/ChatApp?style=for-the-badge)
+![GitHub open pull requests](https://img.shields.io:/github/issues-pr/LeoUpperThrower4/ChatApp?style=for-the-badge)
 
 <!-- Alterar cover quando o projeto estiver 100% funcional -->
 <img src="img/cover.gif" alt="cover">
