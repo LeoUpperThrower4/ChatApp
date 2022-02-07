@@ -106,7 +106,7 @@ end;
 
 procedure TChatView.UpdateChatView;
 var
-  MessageRec   : TMessageRec;
+  MessageRec    : TMessageRec;
   SingleMsgView : TSingleMsgView;
 begin
   lytMessagesView.Controls.DeleteRange(0, lytMessagesView.Controls.Count);
@@ -143,7 +143,6 @@ end;
 constructor TChatView.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-
   BlockSendingMessages;
 
   g_ChatManager.AddChatUpdateSubscriber(Self);
