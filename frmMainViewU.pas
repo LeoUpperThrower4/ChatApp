@@ -47,6 +47,10 @@ implementation
 
 {$R *.fmx}
 
+/// <summary>
+///   Main application form creation. Also creates the Auth form and the handlers
+///   for when login is successfull
+/// </summary>
 procedure TfrmMainView.FormCreate(Sender: TObject);
 begin
   InitializeManagers;
@@ -54,9 +58,11 @@ begin
   AuthView := TAuthView.Create(Self);
   AuthView.Parent := Self;
   AuthView.SetOnSuccessfullLogin(OnSuccessfullLogin);
-
 end;
 
+/// <summary>
+///   Callback function for when login is successfull. Creates Chat form
+/// </summary>
 procedure TfrmMainView.OnSuccessfullLogin(User: IFirebaseUser);
 begin
   AuthView.Free;
@@ -65,15 +71,21 @@ begin
   ChatView.Parent := Self;
 end;
 
+/// <summary>
+///   Initializes all managers
+/// </summary>
 procedure TfrmMainView.InitializeManagers;
 begin
-  if not Assigned(g_AuthManager)
+  if g_AuthManager <> nil
     then g_AuthManager := TAuthManager.Create;
 
-  if not Assigned(g_ChatManager)
+  if g_ChatManager <> nil
     then g_ChatManager := TChatManager.Create;
 end;
 
+/// <summary>
+///   Destroy all managers
+/// </summary>
 procedure TfrmMainView.DestroyManagers;
 begin
   if Assigned(g_AuthManager)
@@ -83,9 +95,12 @@ begin
     then g_ChatManager.Free;
 end;
 
+/// <summary>
+///   Destroys the main application and its managers
+/// </summary>
 destructor TfrmMainView.Destroy;
 begin
-  if Assigned(AuthView)
+  if AuthView <> nil
     then AuthView.Free;
 
   DestroyManagers;

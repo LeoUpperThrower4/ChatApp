@@ -52,6 +52,10 @@ uses
 
 { TChatView }
 
+/// <summary>
+///   Create a TMessageRec message record based on whats on the edit text, on the
+///   current user and on the current date
+/// </summary>
 function TChatView.CreateMsgRec: TMessageRec;
 begin
   Result.Msg := edtMsg.Text.Trim;
@@ -59,6 +63,10 @@ begin
   Result.SentBy := g_AuthManager.CurrentUser.EMail;
 end;
 
+/// <summary>
+///   Callback that is called when the message edit is pressed. When enter is
+///   pressed, message is sent
+/// </summary>
 procedure TChatView.edtMsgKeyDown(Sender: TObject; var Key: Word;
   var KeyChar: Char; Shift: TShiftState);
 begin
@@ -66,16 +74,25 @@ begin
     then HandleEnterClick;
 end;
 
+/// <summary>
+///   Do visual edits to block sending messages
+/// </summary>
 procedure TChatView.BlockSendingMessages;
 begin
   edtMsg.Enabled  := False;
 end;
 
+/// <summary>
+///   Do visual edits to enable sending messages
+/// </summary>
 procedure TChatView.EnableSendingMessages;
 begin
   edtMsg.Enabled  := True;
 end;
 
+/// <summary>
+///   Handles enter button clicked. Blocks sending messages and then send it
+/// </summary>
 procedure TChatView.HandleEnterClick;
 var
   ChatMsgRec : TMessageRec;
@@ -90,6 +107,9 @@ begin
   end;
 end;
 
+/// <summary>
+///   Callback that is called when message is successfully sent
+/// </summary>
 procedure TChatView.OnMessageSent(ResourceParams: TRequestResourceParam; Val: TJSONValue);
 begin
   edtMsg.Text := '';
@@ -97,6 +117,9 @@ begin
   edtMsg.SetFocus;
 end;
 
+/// <summary>
+///   Callback that is called when message failed to send
+/// </summary>
 procedure TChatView.OnMessageFailToSend(const RequestID, ErrMsg: string);
 begin
   // TODO: Adicionar log
@@ -104,9 +127,13 @@ begin
   EnableSendingMessages;
 end;
 
+/// <summary>
+///   Updates the chat grid with the new information. Inherited from
+///   IChatUpdateNotifiable. Receives notification for chat changes
+/// </summary>
 procedure TChatView.UpdateChatView;
 var
-  MessageRec   : TMessageRec;
+  MessageRec    : TMessageRec;
   SingleMsgView : TSingleMsgView;
 begin
   lytMessagesView.Controls.DeleteRange(0, lytMessagesView.Controls.Count);
@@ -140,10 +167,13 @@ begin
   EnableSendingMessages;
 end;
 
+/// <summary>
+///   Create the chat form. Blocks sending messages and starts listening for chat
+///   updates
+/// </summary>
 constructor TChatView.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-
   BlockSendingMessages;
 
   g_ChatManager.AddChatUpdateSubscriber(Self);
