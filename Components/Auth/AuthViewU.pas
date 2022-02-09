@@ -42,7 +42,6 @@ type
     procedure SetSignUpForm;
     procedure SetOnSuccessfullLogin(Callback : OnUserSuccessfullyLoggedIn);
     procedure rectBtnSubmitClick(Sender: TObject);
-    procedure OnUserLoggedIn(User: IFirebaseUser);
   private
     { Private declarations }
     SignUpFrame         : TSignUpView;
@@ -64,6 +63,9 @@ implementation
 
 { TAuthView }
 
+/// <summary>
+///   Creates the Auth form.
+/// </summary>
 constructor TAuthView.Create(AComponent : TComponent);
 begin
   inherited Create(AComponent);
@@ -71,6 +73,10 @@ begin
   SetLoginBtnActive;
 end;
 
+/// <summary>
+///   Callback function that is called when authentication error happens. Only
+///   show message error
+/// </summary>
 procedure TAuthView.OnError(const RequestID, ErrMsg: string);
 var
   msg : String;
@@ -92,11 +98,11 @@ begin
   end;
 end;
 
-procedure TAuthView.OnUserLoggedIn(User: IFirebaseUser);
-begin
-  ShowMessage('Logged');
-end;
-
+/// <summary>
+///   Callback function that is called when authentication is successfull. If it
+///   is sign in, executes the defined successfull login procedure; if it is sign up,
+///   then sets login form with the entered info
+/// </summary>
 procedure TAuthView.OnUserResponse(const Info: string; User: IFirebaseUser);
 var
   email: string;
@@ -114,16 +120,26 @@ begin
   end;
 end;
 
+/// <summary>
+///   Handle click of the rectangle that sets the login frame
+/// </summary>
 procedure TAuthView.rectBtnLoginClick(Sender: TObject);
 begin
   SetLoginBtnActive;
 end;
 
+/// <summary>
+///   Handle click of the rectangle that sets the sign up frame
+/// </summary>
 procedure TAuthView.rectBtnSignUpClick(Sender: TObject);
 begin
   SetSignUpBtnActive;
 end;
 
+/// <summary>
+///   Handles click on the submit button. If login frame is set, it tries to logs
+///   in, otherwise, tries to signs up
+/// </summary>
 procedure TAuthView.rectBtnSubmitClick(Sender: TObject);
 begin
   StartLoadingState;
@@ -137,6 +153,9 @@ begin
   end;
 end;
 
+/// <summary>
+///   Sets visual components to Login mode
+/// </summary>
 procedure TAuthView.SetLoginBtnActive;
 begin
   // Configure Login label
@@ -151,6 +170,9 @@ begin
   FAuthMode := amLogin;
 end;
 
+/// <summary>
+///   Sets visual components to Sign up mode
+/// </summary>
 procedure TAuthView.SetSignUpBtnActive;
 begin
   // Configure SignUp label
@@ -165,6 +187,9 @@ begin
   FAuthMode := amSignUp;
 end;
 
+/// <summary>
+///   Sets Sign up frame
+/// </summary>
 procedure TAuthView.SetSignUpForm;
 begin
   if LoginFrame <> nil
@@ -178,6 +203,9 @@ begin
   end;
 end;
 
+/// <summary>
+///   Starts loading state by disabling edits and buttons
+/// </summary>
 procedure TAuthView.StartLoadingState;
 begin
   rectBtnSubmit.Enabled := False;
@@ -194,6 +222,9 @@ begin
   end;
 end;
 
+/// <summary>
+///   Starts loading state by disabling edits and buttons
+/// </summary>
 procedure TAuthView.StopLoadingState;
 begin
   rectBtnSubmit.Enabled := True;
@@ -210,6 +241,9 @@ begin
   end;
 end;
 
+/// <summary>
+///   Sets Login in frame
+/// </summary>
 procedure TAuthView.SetLoginForm;
 begin
   if SignUpFrame <> nil
@@ -223,6 +257,9 @@ begin
   end;
 end;
 
+/// <summary>
+///   Sets the local callback that will be called when successfull login occurs
+/// </summary>
 procedure TAuthView.SetOnSuccessfullLogin(Callback: OnUserSuccessfullyLoggedIn);
 begin
   FOnSuccessfullLogin := Callback;
